@@ -14,7 +14,7 @@
       "title": "Authentification et rôles",
       "description": "Inscription, connexion, déconnexion. Hachage bcrypt, sessions en table PG avec cookie httpOnly, rôles client/employé/admin, helpers d'autorisation côté serveur (requireRole), aucun compte admin créable depuis l'interface publique. Validation zod de toutes les entrées.",
       "priority": 2,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-public-pages",
