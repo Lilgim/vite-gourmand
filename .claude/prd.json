@@ -35,7 +35,7 @@
       "title": "Tunnel de commande avec calcul de prix",
       "description": "Réservé aux connectés (visiteur invité à se connecter). Formulaire : adresse, date, heure, lieu, GSM, nombre de personnes (minimum imposé par le menu). Calcul serveur : prix menu × personnes, réduction 10 % si dépassement du minimum d'au moins 5, livraison hors Bordeaux 5 € + 0,59 €/km (règle documentée). Détail du prix affiché AVANT validation. Décrément du stock, statut initial horodaté, écriture des stats MongoDB.",
       "priority": 5,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-order-tracking",

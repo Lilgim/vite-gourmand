@@ -42,3 +42,22 @@ export const queryOne = async <T extends Record<string, unknown>>(
   const rows = await query<T>(text, params);
   return rows[0] ?? null;
 };
+
+// Transaction : toutes les écritures liées (commande + historique + stock)
+// réussissent ou échouent ensemble.
+export const withTransaction = async <T>(
+  work: (client: import("pg").PoolClient) => Promise<T>,
+): Promise<T> => {
+  const client = await db.connect();
+  try {
+    await client.query("BEGIN");
+    const result = await work(client);
+    await client.query("COMMIT");
+    return result;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+};

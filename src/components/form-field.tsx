@@ -6,6 +6,7 @@ type FormFieldProps = {
   autoComplete?: string;
   errors?: string[];
   hint?: string;
+  defaultValue?: string;
 };
 
 // Champ accessible : label lié, erreurs annoncées via aria-describedby.
@@ -17,6 +18,7 @@ export const FormField = ({
   autoComplete,
   errors,
   hint,
+  defaultValue,
 }: FormFieldProps) => {
   const errorId = `${name}-error`;
   const hintId = `${name}-hint`;
@@ -47,6 +49,7 @@ export const FormField = ({
         type={type}
         required={required}
         autoComplete={autoComplete}
+        defaultValue={defaultValue}
         aria-invalid={errors?.length ? true : undefined}
         aria-describedby={describedBy}
         className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"

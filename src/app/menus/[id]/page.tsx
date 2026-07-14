@@ -134,6 +134,23 @@ export default async function MenuDetailPage({ params }: MenuPageProps) {
               <strong>Conditions :</strong> {menu.conditions}
             </p>
           )}
+
+          {menu.stock > 0 ? (
+            <Link
+              href={`/commander/${menu.id}`}
+              className="mt-6 block rounded bg-emerald-700 px-4 py-3 text-center font-medium text-white hover:bg-emerald-800"
+            >
+              Commander ce menu
+            </Link>
+          ) : (
+            <p className="mt-6 rounded bg-amber-50 p-3 text-center text-sm text-amber-900">
+              Menu épuisé pour le moment
+            </p>
+          )}
+          <p className="mt-2 text-center text-xs text-zinc-500">
+            La commande nécessite un compte : vous serez invité à vous connecter
+            si ce n'est pas déjà fait.
+          </p>
         </section>
       </div>
     </div>
