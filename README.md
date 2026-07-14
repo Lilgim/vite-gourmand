@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vite & Gourmand
 
-## Getting Started
+Application web pour un traiteur bordelais : consultation des menus, commande en ligne avec calcul de prix (réductions et frais de livraison), suivi de commande horodaté, avis clients modérés, et espace de gestion pour les employés et l'administrateur.
 
-First, run the development server:
+Projet réalisé dans le cadre du Titre Professionnel Développeur Web et Web Mobile.
+
+## Liens essentiels
+
+- Application déployée : _à venir_
+- Outil de gestion de projet : _à venir_
+- Identifiants de démonstration : voir le manuel utilisateur (_à venir_)
+
+## Stack technique
+
+| Couche | Choix | Justification |
+|---|---|---|
+| Framework | Next.js 16 (App Router) + React 19 + TypeScript | Full-stack en un seul déploiement : pages, API et rendu serveur au même endroit, ce qui réduit le risque de livraison |
+| Styles | Tailwind CSS 4 | Rapidité de mise en page, responsive systématique |
+| Base relationnelle | PostgreSQL | Exigée par le sujet : utilisateurs, rôles, menus, plats, commandes, statuts, avis |
+| Base NoSQL | MongoDB | Exigée par le sujet pour les statistiques administrateur (commandes par menu, chiffre d'affaires) |
+| Lint / format | Biome | Un seul outil rapide pour lint + format |
+| Runtime de dev | Bun | Installation et exécution rapides ; compatible npm |
+
+L'hébergement (application, PostgreSQL, MongoDB) sera choisi et documenté dans `.agent-forge/DECISIONS.md` avant le déploiement.
+
+## Démarrage local
+
+Prérequis : [Bun](https://bun.sh) (ou Node.js ≥ 20), PostgreSQL et MongoDB (instructions détaillées à venir avec les scripts SQL).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+git clone https://github.com/Lilgim/vite-gourmand.git
+cd vite-gourmand
+cp .env.example .env   # puis renseigner les valeurs
+bun install
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application est disponible sur http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Autres commandes :
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun run build      # build de production
+bun run lint       # lint + format check (Biome)
+```
 
-## Learn More
+## Organisation git
 
-To learn more about Next.js, take a look at the following resources:
+- `main` : version stable, déployable ;
+- `dev` : intégration continue des fonctionnalités validées ;
+- `feature/*` : une branche par fonctionnalité, partant de `dev` et fusionnée dans `dev` après vérification.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/` : documentation technique, gestion de projet, charte graphique et manuel utilisateur (à venir) ;
+- `.agent-forge/` : journal des décisions, exigences et vérifications du projet.

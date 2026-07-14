@@ -1,0 +1,20 @@
+projet: vite-gourmand
+phase: demarrage
+statut: EN_COURS
+deadline_ecf: 2026-07-23T23:59:00+02:00
+depot_github: https://github.com/Lilgim/vite-gourmand
+branches:
+  - main
+  - dev
+fait:
+  - scaffold Next.js 16 + TypeScript + Tailwind 4 (Bun)
+  - Biome installé et configuré (lint + format)
+  - README initial avec décision de stack
+  - .env.example (aucun secret réel)
+  - mémoire .agent-forge initialisée
+prochaines_etapes:
+  - matrice des exigences complète depuis le sujet officiel
+  - MCD / schéma relationnel + scripts SQL
+  - maquettes (3 desktop + 3 mobiles) et charte graphique
+  - choix hébergement (app + PostgreSQL + MongoDB) documenté
+  - outil de gestion de projet public
