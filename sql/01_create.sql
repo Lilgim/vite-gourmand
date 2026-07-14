@@ -131,11 +131,12 @@ CREATE TABLE orders (
   phone           VARCHAR(20)  NOT NULL,
   distance_km     NUMERIC(6,2) NOT NULL DEFAULT 0 CHECK (distance_km >= 0),
   -- Détail du prix, figé à la commande (justifiable devant le client)
-  unit_price      NUMERIC(8,2) NOT NULL,
-  base_price      NUMERIC(10,2) NOT NULL,
-  discount_amount NUMERIC(10,2) NOT NULL DEFAULT 0,
-  delivery_fee    NUMERIC(10,2) NOT NULL DEFAULT 0,
-  total_price     NUMERIC(10,2) NOT NULL,
+  unit_price      NUMERIC(8,2) NOT NULL CHECK (unit_price >= 0),
+  base_price      NUMERIC(10,2) NOT NULL CHECK (base_price >= 0),
+  discount_amount NUMERIC(10,2) NOT NULL DEFAULT 0
+                  CHECK (discount_amount >= 0 AND discount_amount <= base_price),
+  delivery_fee    NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (delivery_fee >= 0),
+  total_price     NUMERIC(10,2) NOT NULL CHECK (total_price >= 0),
   current_status  order_status NOT NULL DEFAULT 'submitted',
   created_at      TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
@@ -177,7 +178,13 @@ CREATE TABLE opening_hours (
   day_of_week INTEGER NOT NULL UNIQUE CHECK (day_of_week BETWEEN 0 AND 6), -- 0 = lundi
   open_time   TIME,
   close_time  TIME,
-  is_closed   BOOLEAN NOT NULL DEFAULT FALSE
+  is_closed   BOOLEAN NOT NULL DEFAULT FALSE,
+  -- Jour fermé sans horaires, jour ouvert avec horaires cohérents
+  CONSTRAINT opening_hours_coherence CHECK (
+    (is_closed AND open_time IS NULL AND close_time IS NULL)
+    OR (NOT is_closed AND open_time IS NOT NULL AND close_time IS NOT NULL
+        AND open_time < close_time)
+  )
 );
 
 COMMIT;
