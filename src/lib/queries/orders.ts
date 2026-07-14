@@ -99,13 +99,19 @@ export type StatusHistoryEntry = {
   reason: string | null;
 };
 
+// ownerUserId : contrôle d'appartenance appliqué dans la requête elle-même
+// (défense en profondeur). Les appels employé/admin, protégés par rôle,
+// peuvent l'omettre.
 export const getOrderStatusHistory = (
   orderId: number,
+  ownerUserId?: number,
 ): Promise<StatusHistoryEntry[]> =>
   query<StatusHistoryEntry>(
-    `SELECT status, created_at::text, contact_mode, reason
-       FROM order_status_history
-      WHERE order_id = $1
-      ORDER BY created_at`,
-    [orderId],
+    `SELECT h.status, h.created_at::text, h.contact_mode, h.reason
+       FROM order_status_history h
+       JOIN orders o ON o.id = h.order_id
+      WHERE h.order_id = $1
+        AND ($2::integer IS NULL OR o.user_id = $2)
+      ORDER BY h.created_at`,
+    [orderId, ownerUserId ?? null],
   );

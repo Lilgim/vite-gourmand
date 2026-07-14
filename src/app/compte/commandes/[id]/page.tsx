@@ -36,7 +36,7 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
   if (!order) notFound();
 
   const [history, review] = await Promise.all([
-    getOrderStatusHistory(id),
+    getOrderStatusHistory(id, user.id),
     getReviewForOrder(id),
   ]);
 
