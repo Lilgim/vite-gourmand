@@ -54,11 +54,17 @@ export const FormField = ({
         aria-describedby={describedBy}
         className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"
       />
-      {errors?.map((error) => (
-        <p key={error} id={errorId} className="text-sm text-red-700">
-          {error}
-        </p>
-      ))}
+      {errors && errors.length > 0 && (
+        // Conteneur unique : l'id référencé par aria-describedby ne doit
+        // jamais être dupliqué, même avec plusieurs messages d'erreur.
+        <div id={errorId} className="flex flex-col gap-1">
+          {errors.map((error) => (
+            <p key={error} className="text-sm text-red-700">
+              {error}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
