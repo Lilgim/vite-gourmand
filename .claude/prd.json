@@ -56,7 +56,7 @@
       "title": "Espace employé",
       "description": "CRUD menus, plats et horaires. Liste des commandes filtrable par statut et par client. Acceptation et progression des statuts (transitions valides uniquement). Annulation/modification après contact client avec mode de contact et motif obligatoires. Modération des avis.",
       "priority": 8,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-admin",

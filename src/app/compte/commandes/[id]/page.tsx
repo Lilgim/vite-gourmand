@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
+import { ORDER_STATUS_LABELS, REVIEW_STATUS_LABELS } from "@/lib/labels";
 import {
   getOrderForUser,
   getOrderStatusHistory,
   getReviewForOrder,
-  ORDER_STATUS_LABELS,
-  REVIEW_STATUS_LABELS,
 } from "@/lib/queries/orders";
 import { CancelButton } from "./cancel-button";
 import { ReviewForm } from "./review-form";
