@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { createOrder } from "@/app/actions/orders";
+import { OrderForm } from "@/components/order-form";
 import { requireUser } from "@/lib/auth";
 import { formatPrice, getMenuById } from "@/lib/queries/menus";
-import { OrderForm } from "./order-form";
 
 type CommanderPageProps = { params: Promise<{ id: string }> };
 
@@ -31,18 +32,23 @@ export default async function CommanderPage({ params }: CommanderPageProps) {
       <p className="mt-2 text-zinc-600">
         {formatPrice(menu.price_per_person)} par personne — minimum{" "}
         {menu.min_people} personnes.
-        {menu.stock <= 0 && " Ce menu est actuellement épuisé."}
       </p>
 
       {menu.stock > 0 ? (
         <OrderForm
-          menuId={menu.id}
+          action={createOrder}
+          hiddenFieldName="menu_id"
+          hiddenFieldValue={menu.id}
           minPeople={menu.min_people}
           pricePerPerson={Number(menu.price_per_person)}
-          defaultAddress={user.address ?? ""}
-          defaultPostalCode={user.postal_code ?? ""}
-          defaultCity={user.city ?? ""}
-          defaultPhone={user.phone ?? ""}
+          defaults={{
+            address: user.address ?? "",
+            postalCode: user.postal_code ?? "",
+            city: user.city ?? "",
+            phone: user.phone ?? "",
+          }}
+          submitLabel="Valider ma commande"
+          pendingLabel="Validation en cours…"
         />
       ) : (
         <p className="mt-6 rounded bg-amber-50 p-4 text-amber-900">

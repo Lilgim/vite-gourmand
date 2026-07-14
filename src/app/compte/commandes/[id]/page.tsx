@@ -7,6 +7,7 @@ import {
   getOrderStatusHistory,
   ORDER_STATUS_LABELS,
 } from "@/lib/queries/orders";
+import { CancelButton } from "./cancel-button";
 
 type OrderPageProps = { params: Promise<{ id: string }> };
 
@@ -46,6 +47,24 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
       <p className="mt-2 rounded bg-emerald-50 px-3 py-2 font-medium text-emerald-900">
         {ORDER_STATUS_LABELS[order.current_status] ?? order.current_status}
       </p>
+
+      {order.current_status === "submitted" && (
+        <div className="mt-4 flex flex-col gap-3 rounded border border-zinc-200 p-4">
+          <p className="text-sm text-zinc-700">
+            Tant que la commande n'a pas été acceptée, vous pouvez la modifier
+            (sauf le menu) ou l'annuler.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href={`/compte/commandes/${order.id}/modifier`}
+              className="rounded border border-emerald-700 px-3 py-1.5 text-sm font-medium text-emerald-800 hover:bg-emerald-50"
+            >
+              Modifier la commande
+            </Link>
+            <CancelButton orderId={order.id} />
+          </div>
+        </div>
+      )}
 
       <section aria-labelledby="titre-recap" className="mt-8">
         <h2 id="titre-recap" className="text-xl font-bold">
