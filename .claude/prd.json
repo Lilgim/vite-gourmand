@@ -63,7 +63,7 @@
       "title": "Espace administrateur et statistiques NoSQL",
       "description": "Création et désactivation des comptes employés. Statistiques depuis MongoDB : nombre de commandes par menu, comparaison graphique entre menus, chiffre d'affaires filtrable par période.",
       "priority": 9,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-tests",

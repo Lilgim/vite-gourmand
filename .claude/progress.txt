@@ -93,3 +93,14 @@ Learnings:
 - Faux positif de test : compter les occurrences d'un texte dans le HTML Next compte aussi le payload RSC sérialisé → vérifier le contenu métier (titres de menus), pas les libellés d'action.
 - Layout serveur comme garde de rôle : requireRole dans employe/layout.tsx protège toutes les sous-routes.
 Files: src/lib/{status,labels}.ts, src/app/actions/employee.ts, src/lib/queries/employee.ts, src/app/employe/** (layout, commandes, menus, plats, horaires, avis), src/lib/validation.ts (menuSchema, dishSchema, openingHoursSchema)
+
+=== Iteration 9 (2026-07-15 01:20) ===
+Story: story-admin - Espace administrateur et statistiques NoSQL
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; sync-stats.ts a rétabli 2 documents Mongo depuis PG ; smoke test — /admin affiche commandes par menu + CA total 1 034,86 € (agrégation MongoDB), filtre période juin → 547,20 € et 1 seule commande, création/désactivation employés OK ; employé sur /admin refoulé ; admin hérite bien de /employe.
+Learnings:
+- Les commandes seedées en SQL n'existaient pas dans Mongo → scripts/sync-stats.ts (rebuild complet order_stats depuis PG), aussi utile comme preuve « intégration de données NoSQL » pour l'ECF.
+- Graphique de comparaison sans lib : barres div proportionnelles + role=img + aria-label — RGAA-friendly et zéro dépendance.
+- toLocaleString fr-FR utilise une espace insécable étroite (U+202F) pour les milliers → les assertions de test doivent utiliser un motif souple.
+- Désactivation d'un employé = DELETE de ses sessions (révocation immédiate, avantage des sessions en base).
+Files: src/app/actions/admin.ts, src/lib/queries/admin.ts, src/app/admin/** (layout, page stats, employes), scripts/sync-stats.ts
