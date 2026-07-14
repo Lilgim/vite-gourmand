@@ -17,6 +17,15 @@ if (process.env.NODE_ENV !== "production") {
   globalForDb.pgPool = db;
 }
 
+// Sans écouteur, une erreur sur un client inactif du pool ferait
+// tomber le process Node en exception non gérée. Le garde évite
+// d'empiler des écouteurs sur le pool réutilisé entre rechargements HMR.
+if (db.listenerCount("error") === 0) {
+  db.on("error", (error) => {
+    console.error("Erreur pool PostgreSQL (client inactif) :", error.message);
+  });
+}
+
 // Toutes les requêtes passent par cette fonction : paramétrées, jamais de concaténation.
 export const query = async <T extends Record<string, unknown>>(
   text: string,
