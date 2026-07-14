@@ -73,3 +73,12 @@ Learnings:
 - Confirmation destructive sans window.confirm (bloque l'automatisation) : bouton en deux temps armé/confirmé.
 - updateOrder repart TOUJOURS du menu_id stocké en base, jamais du formulaire (règle « menu non modifiable » inviolable côté serveur).
 Files: src/app/actions/account.ts, src/app/compte/{page,profile-form}.tsx, src/app/compte/commandes/[id]/{page,cancel-button}.tsx, src/app/compte/commandes/[id]/modifier/page.tsx, src/components/order-form.tsx (déplacé+généralisé), src/lib/queries/orders.ts, src/lib/validation.ts
+
+=== Iteration 7 (2026-07-14 23:55) ===
+Story: story-reviews - Avis clients avec modération
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test — commande completed avec avis → avis + statut de modération affichés sans formulaire ; commande submitted → pas de section avis ; commande passée en completed sans avis → formulaire notes 1-5 affiché. Garanties serveur : propriétaire + statut completed + unicité (double garde applicative + UNIQUE en base).
+Learnings:
+- Radios de notation stylées : input sr-only + label cliquable — accessible sans lib externe.
+- La modération (validation/refus employé) est portée par story-employee ; l'affichage public des seuls avis "approved" est déjà en place depuis story-public-pages.
+Files: src/app/actions/reviews.ts, src/app/compte/commandes/[id]/review-form.tsx, src/lib/queries/orders.ts, src/lib/validation.ts, src/app/compte/commandes/[id]/page.tsx

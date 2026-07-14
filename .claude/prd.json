@@ -49,7 +49,7 @@
       "title": "Avis clients avec modération",
       "description": "Dépôt d'un avis noté 1-5 après commande terminée (un avis par commande), validation ou refus par employé, seuls les avis validés sont affichés publiquement.",
       "priority": 7,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-employee",
