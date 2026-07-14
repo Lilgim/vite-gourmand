@@ -31,7 +31,7 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
   const order = await getOrderForUser(id, user.id);
   if (!order) notFound();
 
-  const history = await getOrderStatusHistory(id);
+  const history = await getOrderStatusHistory(id, user.id);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
