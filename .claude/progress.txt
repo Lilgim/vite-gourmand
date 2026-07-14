@@ -104,3 +104,15 @@ Learnings:
 - toLocaleString fr-FR utilise une espace insécable étroite (U+202F) pour les milliers → les assertions de test doivent utiliser un motif souple.
 - Désactivation d'un employé = DELETE de ses sessions (révocation immédiate, avantage des sessions en base).
 Files: src/app/actions/admin.ts, src/lib/queries/admin.ts, src/app/admin/** (layout, page stats, employes), scripts/sync-stats.ts
+
+=== Iteration 10 (2026-07-15 02:15) ===
+Story: story-tests - Tests unitaires, intégration et parcours
+Status: PASSED
+Validations réelles : bun test 16 pass / 60 assertions (pricing + machine à états, transitions interdites incluses) ; Playwright 9 passed en 1.1m — parcours sériel complet : visiteur → inscription client → commande (détail prix 554,86 € vérifié AVANT validation) → employé fait progresser jusqu'à Terminée → avis client → modération → publication accueil → admin stats Mongo + comptes employés → contrôles de sécurité par rôle → responsive Pixel 7.
+Learnings:
+- PATTERN RSC & tests : après une Server Action + revalidatePath, le composant client (et son message de succès) peut être remplacé par le re-rendu serveur → asserter le CHANGEMENT D'ÉTAT VISIBLE (bouton suivant, liste vide, statut affiché), jamais le toast éphémère.
+- Playwright strict mode : textes présents en double (description vs nom de plat, badge vs historique, payload RSC) → exact:true, getByRole cell/textbox, ou .first().
+- Le label accessible inclut le texte du <label> entier ("Nom *") → getByLabel(/^Nom\b/) plutôt qu'exact:true.
+- Devices Playwright : iPhone = WebKit (non installé) → Pixel 7 pour tester mobile sur Chromium.
+- reset-db.ts (drop schema + 01_create + 02_seed + sync Mongo) = e2e reproductibles ET re-preuve permanente que les scripts SQL passent sur base vide.
+Files: tests/{pricing,status}.test.ts, e2e/{parcours,responsive}.spec.ts, playwright.config.ts, scripts/reset-db.ts, package.json (scripts test/db:reset/test:e2e)
