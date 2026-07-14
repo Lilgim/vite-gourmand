@@ -7,7 +7,7 @@
       "title": "Fondations données : Docker, scripts SQL, clients PG/Mongo",
       "description": "docker-compose.yml (PostgreSQL + MongoDB), sql/01_create.sql (schéma complet : users/roles, themes, diets, dishes, allergens, menus, menu_dishes, menu_images, orders, order_status_history, reviews, opening_hours, sessions), sql/02_seed.sql (données de démo + comptes demo client/employé/admin avec mots de passe hachés), src/lib/env.ts (validation zod), src/lib/db.ts (pool pg), src/lib/mongo.ts. Scripts testés sur base vide.",
       "priority": 1,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-auth",

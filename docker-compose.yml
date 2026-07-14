@@ -1,0 +1,37 @@
+# Bases de données locales de développement
+# Démarrage : docker compose up -d
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: vg-postgres
+    environment:
+      POSTGRES_USER: vg
+      POSTGRES_PASSWORD: vg_dev_password
+      POSTGRES_DB: vite_gourmand
+    ports:
+      # 5433 côté hôte : un PostgreSQL natif occupe souvent déjà 5432
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vg -d vite_gourmand"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mongo:
+    image: mongo:8
+    container_name: vg-mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pg_data:
+  mongo_data:
