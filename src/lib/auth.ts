@@ -50,12 +50,21 @@ export const createSession = async (userId: number): Promise<void> => {
   });
 };
 
+// Validation stricte avant toute requête : une valeur de cookie manipulée
+// ne doit jamais atteindre le cast UUID de PostgreSQL.
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const isValidSessionId = (value: string | undefined): value is string =>
+  value !== undefined && UUID_PATTERN.test(value);
+
 export const destroySession = async (): Promise<void> => {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(SESSION_COOKIE)?.value;
-  if (sessionId) {
+  if (isValidSessionId(sessionId)) {
     await query("DELETE FROM sessions WHERE id = $1", [sessionId]);
   }
+  // Cookie supprimé même si la valeur était absente ou malformée.
   cookieStore.delete(SESSION_COOKIE);
 };
 
@@ -64,10 +73,7 @@ export const destroySession = async (): Promise<void> => {
 export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!sessionId) return null;
-
-  // Un UUID invalide ferait échouer le cast : on filtre en amont.
-  if (!/^[0-9a-f-]{36}$/i.test(sessionId)) return null;
+  if (!isValidSessionId(sessionId)) return null;
 
   return queryOne<SessionUser>(
     `SELECT u.id, u.email, u.first_name, u.last_name, u.phone,
