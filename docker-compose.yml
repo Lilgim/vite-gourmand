@@ -9,8 +9,9 @@ services:
       POSTGRES_PASSWORD: vg_dev_password
       POSTGRES_DB: vite_gourmand
     ports:
+      # Loopback uniquement (bases de dev sans durcissement) ;
       # 5433 côté hôte : un PostgreSQL natif occupe souvent déjà 5432
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
@@ -23,7 +24,7 @@ services:
     image: mongo:8
     container_name: vg-mongo
     ports:
-      - "27018:27017"
+      - "127.0.0.1:27018:27017"
     volumes:
       - mongo_data:/data/db
     healthcheck:
