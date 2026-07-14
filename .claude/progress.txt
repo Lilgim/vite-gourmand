@@ -1,0 +1,5 @@
+=== Init (2026-07-14 20:10) ===
+Boucle Ralph initialisée. 12 stories dérivées de .agent-forge/PLAN.md et du brief ECF.
+Environnement : Windows 11, Bun 1.3.6, Docker 29.2 + Compose v5 (PostgreSQL/MongoDB en conteneurs), Next.js 16.2.10.
+Gitflow : une branche feature/<story> depuis dev, merge --no-ff dans dev après validation (lint + typecheck + build + tests).
+Contrainte : dépôt public — aucun secret, aucun contenu Studi.

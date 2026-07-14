@@ -1,0 +1,90 @@
+{
+  "project": "Vite & Gourmand — ECF TP DWWM",
+  "branch": "dev (une branche feature/* par story, fusionnée dans dev après validation)",
+  "stories": [
+    {
+      "id": "story-db",
+      "title": "Fondations données : Docker, scripts SQL, clients PG/Mongo",
+      "description": "docker-compose.yml (PostgreSQL + MongoDB), sql/01_create.sql (schéma complet : users/roles, themes, diets, dishes, allergens, menus, menu_dishes, menu_images, orders, order_status_history, reviews, opening_hours, sessions), sql/02_seed.sql (données de démo + comptes demo client/employé/admin avec mots de passe hachés), src/lib/env.ts (validation zod), src/lib/db.ts (pool pg), src/lib/mongo.ts. Scripts testés sur base vide.",
+      "priority": 1,
+      "passes": false
+    },
+    {
+      "id": "story-auth",
+      "title": "Authentification et rôles",
+      "description": "Inscription, connexion, déconnexion. Hachage bcrypt, sessions en table PG avec cookie httpOnly, rôles client/employé/admin, helpers d'autorisation côté serveur (requireRole), aucun compte admin créable depuis l'interface publique. Validation zod de toutes les entrées.",
+      "priority": 2,
+      "passes": false
+    },
+    {
+      "id": "story-public-pages",
+      "title": "Pages publiques et layout",
+      "description": "Layout global (header/nav/footer accessibles), accueil (présentation, avis validés, horaires), page entreprise, contact (formulaire), mentions légales, CGV (incluant règle des 600 € matériel non restitué après 10 jours ouvrés). Responsive.",
+      "priority": 3,
+      "passes": false
+    },
+    {
+      "id": "story-menus",
+      "title": "Catalogue des menus avec filtres",
+      "description": "Liste des menus et page détail (galerie, description, thème, plats, allergènes, régime, nb minimum de personnes, prix minimum, conditions, stock). Filtres combinables par prix, thème, régime et nombre minimum de personnes SANS rechargement complet.",
+      "priority": 4,
+      "passes": false
+    },
+    {
+      "id": "story-order",
+      "title": "Tunnel de commande avec calcul de prix",
+      "description": "Réservé aux connectés (visiteur invité à se connecter). Formulaire : adresse, date, heure, lieu, GSM, nombre de personnes (minimum imposé par le menu). Calcul serveur : prix menu × personnes, réduction 10 % si dépassement du minimum d'au moins 5, livraison hors Bordeaux 5 € + 0,59 €/km (règle documentée). Détail du prix affiché AVANT validation. Décrément du stock, statut initial horodaté, écriture des stats MongoDB.",
+      "priority": 5,
+      "passes": false
+    },
+    {
+      "id": "story-order-tracking",
+      "title": "Espace client : historique, suivi, profil",
+      "description": "Historique détaillé des commandes, suivi horodaté des statuts, modification/annulation possible avant acceptation (sauf changement de menu), modification des données personnelles.",
+      "priority": 6,
+      "passes": false
+    },
+    {
+      "id": "story-reviews",
+      "title": "Avis clients avec modération",
+      "description": "Dépôt d'un avis noté 1-5 après commande terminée (un avis par commande), validation ou refus par employé, seuls les avis validés sont affichés publiquement.",
+      "priority": 7,
+      "passes": false
+    },
+    {
+      "id": "story-employee",
+      "title": "Espace employé",
+      "description": "CRUD menus, plats et horaires. Liste des commandes filtrable par statut et par client. Acceptation et progression des statuts (transitions valides uniquement). Annulation/modification après contact client avec mode de contact et motif obligatoires. Modération des avis.",
+      "priority": 8,
+      "passes": false
+    },
+    {
+      "id": "story-admin",
+      "title": "Espace administrateur et statistiques NoSQL",
+      "description": "Création et désactivation des comptes employés. Statistiques depuis MongoDB : nombre de commandes par menu, comparaison graphique entre menus, chiffre d'affaires filtrable par période.",
+      "priority": 9,
+      "passes": false
+    },
+    {
+      "id": "story-tests",
+      "title": "Tests unitaires, intégration et parcours",
+      "description": "Tests unitaires des règles métier (calcul prix, réduction, livraison, transitions de statuts, autorisation par rôle), tests d'intégration API, parcours end-to-end des 4 rôles (visiteur, client, employé, admin) avec Playwright. Transitions interdites testées.",
+      "priority": 10,
+      "passes": false
+    },
+    {
+      "id": "story-hardening",
+      "title": "Accessibilité, sécurité, emails",
+      "description": "Socle RGAA : navigation clavier, focus visible, labels, contrastes, hiérarchie de titres, alternatives, erreurs compréhensibles. Contrôle responsive mobile/desktop. Emails transactionnels en environnement de test documenté. Revue sécurité : validation serveur systématique, requêtes paramétrées, XSS/CSRF, headers.",
+      "priority": 11,
+      "passes": false
+    },
+    {
+      "id": "story-delivery",
+      "title": "Déploiement et livrables documentaires",
+      "description": "Déploiement HTTPS (app + PostgreSQL + MongoDB) avec données de démo, choix d'hébergement documenté dans DECISIONS.md. Manuel utilisateur PDF (parcours + identifiants démo), charte graphique PDF (palette, typo, 3 maquettes desktop + 3 mobiles), documentation technique (architecture, MCD, cas d'utilisation, séquence, déploiement), doc gestion de projet + board public, source anglophone traduite, veille sécurité. Copie officielle complétée (transmission par Lucas).",
+      "priority": 12,
+      "passes": false
+    }
+  ]
+}
