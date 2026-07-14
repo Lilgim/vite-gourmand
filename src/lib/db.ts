@@ -9,6 +9,8 @@ export const db =
   new Pool({
     connectionString: env.DATABASE_URL,
     max: 10,
+    connectionTimeoutMillis: 5_000,
+    idleTimeoutMillis: 30_000,
   });
 
 if (process.env.NODE_ENV !== "production") {
