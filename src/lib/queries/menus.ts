@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { query, queryOne } from "@/lib/db";
 
 export type MenuSummary = {
@@ -61,16 +62,19 @@ export type MenuDetail = {
   stock: number;
 };
 
-export const getMenuById = (id: number): Promise<MenuDetail | null> =>
-  queryOne<MenuDetail>(
-    `SELECT m.id, m.title, m.description, t.name AS theme, d.name AS diet,
+// Mémoïsé par requête : generateMetadata et la page demandent le même menu.
+export const getMenuById = cache(
+  (id: number): Promise<MenuDetail | null> =>
+    queryOne<MenuDetail>(
+      `SELECT m.id, m.title, m.description, t.name AS theme, d.name AS diet,
             m.min_people, m.price_per_person::text, m.conditions, m.stock
        FROM menus m
        JOIN themes t ON t.id = m.theme_id
        JOIN diets d  ON d.id = m.diet_id
       WHERE m.id = $1 AND m.is_active`,
-    [id],
-  );
+      [id],
+    ),
+);
 
 export const getMenuDishes = (menuId: number): Promise<MenuDish[]> =>
   query<MenuDish>(
@@ -100,4 +104,7 @@ export const getDiets = (): Promise<{ name: string }[]> =>
   query<{ name: string }>("SELECT name FROM diets ORDER BY name");
 
 export const formatPrice = (price: string): string =>
-  `${Number(price).toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`;
+  `${Number(price).toLocaleString("fr-FR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })} €`;
