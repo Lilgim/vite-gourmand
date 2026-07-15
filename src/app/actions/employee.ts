@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { query, queryOne, withTransaction } from "@/lib/db";
+import { ORDER_STATUS_LABELS } from "@/lib/labels";
+import { sendMail, statusChangeMail } from "@/lib/mailer";
 import { getOrderStatsCollection } from "@/lib/mongo";
 import {
   canTransition,
@@ -46,7 +48,16 @@ export const advanceOrderStatus = async (
     id: number;
     menu_id: number;
     current_status: string;
-  }>("SELECT id, menu_id, current_status FROM orders WHERE id = $1", [orderId]);
+    client_email: string;
+    client_first_name: string;
+  }>(
+    `SELECT o.id, o.menu_id, o.current_status,
+            u.email AS client_email, u.first_name AS client_first_name
+       FROM orders o
+       JOIN users u ON u.id = o.user_id
+      WHERE o.id = $1`,
+    [orderId],
+  );
   if (!order) return { status: "error", message: "Commande introuvable." };
 
   // Transitions interdites refusées côté serveur.
@@ -93,6 +104,16 @@ export const advanceOrderStatus = async (
   } catch (error) {
     console.error("Mise à jour des statistiques MongoDB impossible :", error);
   }
+
+  // Le client est informé de chaque changement de statut (mode test si SMTP absent).
+  await sendMail(
+    statusChangeMail(
+      order.client_email,
+      order.client_first_name,
+      orderId,
+      ORDER_STATUS_LABELS[newStatus] ?? newStatus,
+    ),
+  );
 
   revalidatePath(`/employe/commandes/${orderId}`);
   revalidatePath("/employe");
