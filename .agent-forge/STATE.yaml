@@ -1,21 +1,12 @@
 projet: vite-gourmand
-phase: construction — 10/12 stories livrées
+phase: livraison — code mergé sur main, design + déploiement en cours
 statut: EN_COURS
 deadline_ecf: 2026-07-23T23:59:00+02:00
 depot_github: https://github.com/Lilgim/vite-gourmand
 branches:
-  - main
-  - dev
-  - feature/db-foundations (PR 1, review traitée)
-  - feature/auth (PR 2, review traitée)
-  - feature/public-pages (PR 3, review sans finding)
-  - feature/menus (PR 4, review sans finding)
-  - feature/order (PR 5, review traitée)
-  - feature/order-tracking (PR 6)
-  - feature/reviews (PR 7)
-  - feature/employee (PR 8)
-  - feature/admin (PR 9)
-  - feature/tests (PR 10)
+  - main (à jour — PR 12 dev→main mergée le 2026-07-18)
+  - dev (à jour — PR 1→11 mergées dans l'ordre le 2026-07-18)
+  - feature/* (conservées pour traçabilité, toutes mergées)
 fait:
   - fondations données (docker, scripts SQL testés sur base vide, clients PG/Mongo)
   - authentification sessions + rôles, gardes serveur
@@ -27,9 +18,13 @@ fait:
   - espace employé (commandes filtrables, machine à états, CRUD menus/plats/horaires)
   - espace admin (comptes employés, stats MongoDB filtrables avec graphique)
   - 16 tests unitaires + 9 parcours e2e Playwright (4 rôles + responsive)
+  - story-hardening (headers sécurité, emails transactionnels mode test, passe RGAA)
+  - PR 1→11 mergées dans dev, PR 12 dev→main mergée (2026-07-18, vérifs lint/typecheck/test/build vertes)
 actions_humaines_requises:
-  - merger les PR 1→10 dans l'ordre (merge auto interdit par la politique du projet)
-  - choisir/valider l'hébergement (app + PostgreSQL + MongoDB) — dépense
+  - connecter le MCP Paper à Claude Code (choix design acté par lilgim le 2026-07-18)
+  - configurer le DNS du sous-domaine vers le VPS Alfred + fournir le domaine
 prochaines_etapes:
-  - story-hardening : headers sécurité, emails transactionnels (env test), passe RGAA complète
-  - story-delivery : déploiement HTTPS, manuel utilisateur PDF, charte graphique PDF (3 maquettes desktop + 3 mobiles), doc technique (MCD, cas d'utilisation, séquence), board de gestion de projet public, source anglophone, veille sécurité, copie officielle
+  - passe design du front (Paper si MCP dispo, sinon fallback code) + 6 maquettes pour la charte
+  - audit front 4 rôles + fixes
+  - infra de déploiement (Dockerfile, docker-compose.prod.yml, Caddy TLS) puis déploiement VPS Alfred
+  - story-delivery : manuel utilisateur PDF, charte graphique PDF, doc technique (MCD, cas d'utilisation, séquence), board de gestion de projet public, source anglophone, veille sécurité, copie officielle
