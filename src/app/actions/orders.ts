@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { queryOne, withTransaction } from "@/lib/db";
+import { orderConfirmationMail, sendMail } from "@/lib/mailer";
 import { getOrderStatsCollection } from "@/lib/mongo";
 import { computePriceDetail, isDeliveryFree } from "@/lib/pricing";
 import { createOrderSchema, type FormState } from "@/lib/validation";
@@ -140,6 +141,17 @@ export const createOrder = async (
   } catch (error) {
     console.error("Écriture des statistiques MongoDB impossible :", error);
   }
+
+  // Email de confirmation (mode test documenté si SMTP absent).
+  await sendMail(
+    orderConfirmationMail(
+      user.email,
+      user.first_name,
+      orderId,
+      menu.title,
+      price.totalPrice,
+    ),
+  );
 
   redirect(`/compte/commandes/${orderId}`);
 };

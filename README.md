@@ -25,24 +25,62 @@ L'hébergement (application, PostgreSQL, MongoDB) sera choisi et documenté dans
 
 ## Démarrage local
 
-Prérequis : [Bun](https://bun.sh) (ou Node.js ≥ 20), PostgreSQL et MongoDB (instructions détaillées à venir avec les scripts SQL).
+Prérequis : [Bun](https://bun.sh), Node.js ≥ 20 et Docker (pour PostgreSQL et MongoDB).
 
 ```bash
 git clone https://github.com/Lilgim/vite-gourmand.git
 cd vite-gourmand
-cp .env.example .env   # puis renseigner les valeurs
+cp .env.example .env       # les valeurs par défaut correspondent au docker-compose
 bun install
+docker compose up -d       # PostgreSQL (port 5433) + MongoDB (port 27018)
+bun run db:reset           # crée le schéma (sql/01_create.sql), insère les données
+                           # de démo (sql/02_seed.sql) et synchronise les stats Mongo
 bun dev
 ```
 
 L'application est disponible sur http://localhost:3000.
 
-Autres commandes :
+### Comptes de démonstration
+
+| Rôle | Email | Mot de passe |
+|---|---|---|
+| Client | `client@demo.vite-gourmand.fr` | `ClientDemo2026!` |
+| Employé | `employe@demo.vite-gourmand.fr` | `EmployeDemo2026!` |
+| Administrateur | `admin@demo.vite-gourmand.fr` | `AdminDemo2026!` |
+
+Identifiants dédiés à la démonstration — aucune donnée réelle.
+
+### Commandes
 
 ```bash
 bun run build      # build de production
 bun run lint       # lint + format check (Biome)
+bun run typecheck  # vérification TypeScript
+bun test           # tests unitaires des règles métier (prix, statuts)
+bun run test:e2e   # remet la base à zéro puis joue les parcours Playwright
+bun run db:reset   # base de démonstration propre (schéma + seed + stats)
 ```
+
+## Sécurité
+
+- Mots de passe hachés (bcrypt, coût 12), sessions serveur en base avec cookie
+  `httpOnly`/`sameSite` — la désactivation d'un compte révoque ses sessions.
+- Autorisation par rôle vérifiée côté serveur (layouts + chaque Server Action) ;
+  le proxy ne fait qu'une redirection optimiste.
+- Toutes les requêtes SQL sont paramétrées ; toutes les entrées sont validées
+  par des schémas zod côté serveur.
+- En-têtes de sécurité globaux (CSP, X-Frame-Options, nosniff, Referrer-Policy) ;
+  protection CSRF des mutations assurée par les Server Actions de Next.js
+  (vérification d'origine intégrée).
+
+## Emails transactionnels
+
+Confirmation de commande et notifications de changement de statut.
+Sans configuration SMTP (`SMTP_HOST` vide), l'application fonctionne en
+**mode test documenté** : chaque email est journalisé sur la sortie standard
+du serveur au lieu d'être envoyé — c'est le mode utilisé en développement
+et en démonstration. Renseigner les variables `SMTP_*` du `.env` bascule
+sur un envoi réel via nodemailer.
 
 ## Organisation git
 

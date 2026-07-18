@@ -14,6 +14,13 @@
 
 **À préciser :** ORM/driver (Prisma vs Drizzle vs SQL direct) — trancher au moment du schéma ; le sujet exige de toute façon des scripts SQL explicites de création et d'insertion.
 
-## D-003 — Hébergement : EN ATTENTE
+## D-003 — Hébergement : VPS personnel + sous-domaine (2026-07-15)
 
-Comparer avant le déploiement (coût, simplicité, HTTPS, compatibilité PostgreSQL + MongoDB) et documenter ici. Candidats à évaluer : à lister lors de la phase déploiement. Contrainte : HTTPS obligatoire en production.
+**Décision (lilgim) :** déploiement sur son VPS personnel (Hostinger) avec un sous-domaine dédié.
+
+**Options comparées :**
+- *VPS dédié neuf (~4-6 €/mois)* : isolation parfaite mais coût et machine supplémentaires à gérer ;
+- *PaaS gratuit (Vercel + Neon + Atlas M0)* : 0 € mais trois services, cold starts, déploiement moins démonstratif pour l'examen ;
+- *VPS personnel existant (retenu)* : coût zéro, contrôle total, et le déploiement (Docker Compose + reverse proxy + TLS) constitue un livrable défendable à l'oral.
+
+**Garde-fous :** stack Docker Compose et réseau Docker dédiés (aucune interaction avec les autres services de la machine), secrets générés sur le serveur et jamais commités, HTTPS via reverse proxy avec certificat automatique.

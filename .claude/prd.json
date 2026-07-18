@@ -77,7 +77,7 @@
       "title": "Accessibilité, sécurité, emails",
       "description": "Socle RGAA : navigation clavier, focus visible, labels, contrastes, hiérarchie de titres, alternatives, erreurs compréhensibles. Contrôle responsive mobile/desktop. Emails transactionnels en environnement de test documenté. Revue sécurité : validation serveur systématique, requêtes paramétrées, XSS/CSRF, headers.",
       "priority": 11,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-delivery",
