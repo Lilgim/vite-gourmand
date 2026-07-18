@@ -47,3 +47,18 @@ Learnings:
 - Visuels menus : SVG placeholders locaux dans public/images/menus/ (dépôt public → pas de photos sous licence) ; biome-ignore noImgElement pour <img> sur SVG locaux.
 - Agrégats SQL : LEFT JOIN LATERAL pour première image + array_agg DISTINCT ... FILTER pour les allergènes par menu.
 Files: src/lib/queries/menus.ts, src/app/menus/{page,menus-explorer}.tsx, src/app/menus/[id]/page.tsx, public/images/menus/*.svg, sql/02_seed.sql (.jpg→.svg)
+
+=== Reviews CodeRabbit PR1+PR2 (2026-07-14 22:20) ===
+PR1: 10 findings → 8 corrigés (loopback, CHECK montants/horaires, timeouts pool, check-db durci), 1 différé (trigger audit → couche applicative story-employee), 1 déjà couvert. PR2: 3 findings → UUID strict partagé, pool.on(error) avec garde HMR, 1 déjà corrigé. Classement dans .agent-forge/REVIEWS.md, réponses postées sur les PR.
+BLOQUANT WORKFLOW : merge des PR refusé par les permissions (règle projet « jamais de merge automatique de PR ») → les PR s'empilent (feature/N branchée sur feature/N-1), lilgim merge manuellement dans l'ordre 1→N.
+
+=== Iteration 5 (2026-07-14 22:50) ===
+Story: story-order - Tunnel de commande avec calcul de prix
+Status: PASSED
+Validations réelles : check-pricing.ts 5/5 règles conformes ; lint/typecheck/build OK ; smoke test avec session réelle en base — formulaire rendu, détail du prix avant validation présent, champ distance masqué à Bordeaux, /commander anonyme → 307, cookie malformé → pas de 500.
+Learnings:
+- BUG ATTRAPÉ par la vérification : arrondi flottant (7,655 € → 7,65 € au lieu de 7,66 €) → calculs monétaires en CENTIMES ENTIERS, jamais en euros flottants.
+- PS 5.1 : le header Cookie passé via -Headers est un header restreint JAMAIS envoyé → utiliser WebRequestSession + System.Net.Cookie pour tester des routes authentifiées.
+- Server Action + stock : décrément conditionnel (UPDATE ... WHERE stock > 0) dans withTransaction ; stats MongoDB en best-effort (jamais bloquantes).
+- allowImportingTsExtensions requis pour que tsc accepte les imports .ts des scripts node.
+Files: src/lib/pricing.ts, src/lib/validation.ts, src/app/actions/orders.ts, src/app/commander/[id]/*, src/app/compte/commandes/[id]/page.tsx, src/lib/queries/orders.ts, src/lib/db.ts, scripts/check-pricing.ts, src/proxy.ts
