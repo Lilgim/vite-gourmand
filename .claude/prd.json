@@ -70,7 +70,7 @@
       "title": "Tests unitaires, intégration et parcours",
       "description": "Tests unitaires des règles métier (calcul prix, réduction, livraison, transitions de statuts, autorisation par rôle), tests d'intégration API, parcours end-to-end des 4 rôles (visiteur, client, employé, admin) avec Playwright. Transitions interdites testées.",
       "priority": 10,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-hardening",
