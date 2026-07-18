@@ -35,3 +35,16 @@ Chaque contrôle consigne la commande exécutée, la sortie réelle (extrait) et
 | Smoke test HTTP | `Invoke-WebRequest http://127.0.0.1:3001/` et `/menus` | ✔ HTTP 200 ×2, en-tête CSP présent, contenu accueil correct |
 | e2e après passage `output: standalone` conditionnel | `bun run test:e2e` | ✔ `9 passed (10.8s)` (un premier échec venait d'un serveur Node zombie sur :3000, tué) |
 | Déploiement HTTPS sur le VPS | — | NON EXÉCUTÉ — en attente du sous-domaine DNS (action lilgim) |
+
+## 2026-07-18 — Passe design (charte « Crème & Bordeaux »)
+
+DA validée dans Paper (fichier « Vite & Gourmand — charte & maquettes » : 3 maquettes desktop + 3 mobiles, palette parchemin/bordeaux/bronze, Playfair Display + Inter). Application à tout le front (PR #14, mergée dans `dev`).
+
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| Lint | `bun run lint:fix` puis `bun run lint` | ✔ 14 fichiers reformatés, 0 erreur restante (71 fichiers) |
+| Typecheck | `bun run typecheck` | ✔ `tsc --noEmit` sans erreur |
+| Tests unitaires | `bun run test` | ✔ `16 pass, 60 expect()` |
+| Build production | `bun run build` | ✔ 24 routes |
+| Parcours e2e (4 rôles + responsive) | `bun run test:e2e` | ✔ `9 passed (13.0s)` — textes/labels/rôles ARIA inchangés |
+| Audit visuel du front restylé | captures Playwright réelles (accueil, menus, commande, suivi horodaté, stats admin, mobile) | ✔ DA fidèle : eyebrow bronze, titres Playfair, boutons/étoiles/prix bordeaux, footer profond, visuels menus en aplats pastel |

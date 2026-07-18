@@ -20,11 +20,10 @@ fait:
   - 16 tests unitaires + 9 parcours e2e Playwright (4 rôles + responsive)
   - story-hardening (headers sécurité, emails transactionnels mode test, passe RGAA)
   - PR 1→11 mergées dans dev, PR 12 dev→main mergée (2026-07-18, vérifs lint/typecheck/test/build vertes)
+  - infra de déploiement (Dockerfile multistage, docker-compose.prod.yml isolé, Caddy TLS) — PR 13, validée par run local (stack healthy, seed, smoke test HTTP 200/CSP)
+  - passe design charte « Crème & Bordeaux » appliquée à tout le front — PR 14 (Paper : 3 maquettes desktop + 3 mobiles ; lint/tsc/test/build/e2e verts, audit visuel réel)
 actions_humaines_requises:
-  - connecter le MCP Paper à Claude Code (choix design acté par lilgim le 2026-07-18)
-  - configurer le DNS du sous-domaine vers le VPS Alfred + fournir le domaine
+  - configurer le DNS du sous-domaine vers le VPS Alfred + fournir le domaine (bloque le déploiement HTTPS)
 prochaines_etapes:
-  - passe design du front (Paper si MCP dispo, sinon fallback code) + 6 maquettes pour la charte
-  - audit front 4 rôles + fixes
-  - infra de déploiement (Dockerfile, docker-compose.prod.yml, Caddy TLS) puis déploiement VPS Alfred
-  - story-delivery : manuel utilisateur PDF, charte graphique PDF, doc technique (MCD, cas d'utilisation, séquence), board de gestion de projet public, source anglophone, veille sécurité, copie officielle
+  - déploiement VPS Alfred (git clone + .env + compose up) une fois le DNS prêt, puis validation prod des 4 rôles
+  - story-delivery : charte graphique PDF (réutiliser les 6 maquettes Paper), manuel utilisateur PDF, doc technique (MCD, cas d'utilisation, séquence), board de gestion de projet public, source anglophone, veille sécurité, matrice d'exigences, copie officielle
