@@ -1,0 +1,17 @@
+=== Init (2026-07-14 20:10) ===
+Boucle Ralph initialisée. 12 stories dérivées de .agent-forge/PLAN.md et du brief ECF.
+Environnement : Windows 11, Bun 1.3.6, Docker 29.2 + Compose v5 (PostgreSQL/MongoDB en conteneurs), Next.js 16.2.10.
+Gitflow : une branche feature/<story> depuis dev, merge --no-ff dans dev après validation (lint + typecheck + build + tests).
+Contrainte : dépôt public — aucun secret, aucun contenu Studi.
+
+=== Iteration 1 (2026-07-14 20:35) ===
+Story: story-db - Fondations données : Docker, scripts SQL, clients PG/Mongo
+Status: PASSED
+Validations réelles : 01_create.sql + 02_seed.sql sur base vide (COMMIT x2), check-db.ts (6 menus, 3 users, mongo ping 1), biome 10 fichiers OK, tsc OK, next build OK.
+Learnings:
+- Un PostgreSQL natif Windows occupe 5432 → conteneurs mappés 5433 (pg) / 27018 (mongo).
+- Driver mongodb (bson) incompatible Bun sur Windows (node:v8 isBuildingSnapshot) → scripts utilitaires avec `node --env-file=.env` ; l'app Next tourne sur Node donc pas d'impact.
+- Out-File PowerShell écrit un BOM UTF-8 qui corrompt la 1re clé d'un .env → écrire via [IO.File]::WriteAllText sans BOM.
+- Premier bind d'un port docker parfois refusé juste après un up raté (relais WSL pas libéré) → retry suffit.
+Files: docker-compose.yml, sql/01_create.sql, sql/02_seed.sql, src/lib/{env,db,mongo}.ts, scripts/check-db.ts, .env.example
+Workflow: CodeRabbit installé par lilgim → chaque story part en PR feature→dev pour review indépendante avant merge.
