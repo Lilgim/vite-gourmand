@@ -12,11 +12,11 @@ export default async function InscriptionPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-10">
-      <h1 className="mb-6 text-2xl font-bold">Créer un compte</h1>
+      <h1 className="mb-6 text-2xl">Créer un compte</h1>
       <RegisterForm />
       <p className="mt-4 text-sm">
         Déjà inscrit ?{" "}
-        <Link href="/connexion" className="text-emerald-800 underline">
+        <Link href="/connexion" className="text-primary underline">
           Se connecter
         </Link>
       </p>

@@ -21,15 +21,18 @@ export default async function CommanderPage({ params }: CommanderPageProps) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <nav aria-label="Fil d'Ariane" className="text-sm text-zinc-600">
+      <nav
+        aria-label="Fil d'Ariane"
+        className="text-xs uppercase tracking-widest text-muted"
+      >
         <Link href={`/menus/${menu.id}`} className="hover:underline">
           {menu.title}
         </Link>{" "}
         / <span aria-current="page">Commander</span>
       </nav>
 
-      <h1 className="mt-4 text-3xl font-bold">Commander : {menu.title}</h1>
-      <p className="mt-2 text-zinc-600">
+      <h1 className="mt-4 text-3xl">Commander : {menu.title}</h1>
+      <p className="mt-2 text-muted">
         {formatPrice(menu.price_per_person)} par personne — minimum{" "}
         {menu.min_people} personnes.
       </p>
@@ -51,7 +54,7 @@ export default async function CommanderPage({ params }: CommanderPageProps) {
           pendingLabel="Validation en cours…"
         />
       ) : (
-        <p className="mt-6 rounded bg-amber-50 p-4 text-amber-900">
+        <p className="mt-6 rounded-lg bg-badge p-4 text-ink">
           Ce menu n'est plus disponible pour le moment.{" "}
           <Link href="/menus" className="underline">
             Voir les autres menus

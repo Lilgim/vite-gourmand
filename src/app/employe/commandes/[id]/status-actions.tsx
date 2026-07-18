@@ -31,7 +31,7 @@ export const StatusActions = ({
 
   if (nextStatuses.length === 0) {
     return (
-      <p className="text-sm text-zinc-600">
+      <p className="text-sm text-muted">
         Cette commande est dans un état final : aucune action disponible.
       </p>
     );
@@ -42,7 +42,7 @@ export const StatusActions = ({
       {state.status === "error" && state.message && (
         <p
           role="alert"
-          className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
         >
           {state.message}
         </p>
@@ -50,7 +50,7 @@ export const StatusActions = ({
       {state.status === "success" && state.message && (
         <p
           role="status"
-          className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+          className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
         >
           {state.message}
         </p>
@@ -63,12 +63,12 @@ export const StatusActions = ({
             type="button"
             onClick={() => setSelected(status)}
             aria-pressed={selected === status}
-            className={`rounded border px-3 py-1.5 text-sm font-medium ${
+            className={`rounded-lg border px-3 py-1.5 text-sm font-medium ${
               selected === status
-                ? "border-emerald-700 bg-emerald-700 text-white"
+                ? "border-primary bg-primary text-white"
                 : status === "cancelled"
                   ? "border-red-300 text-red-800 hover:bg-red-50"
-                  : "border-zinc-300 hover:bg-zinc-50"
+                  : "border-line hover:bg-bg"
             }`}
           >
             → {ORDER_STATUS_LABELS[status] ?? status}
@@ -79,20 +79,23 @@ export const StatusActions = ({
       {selected && (
         <form
           action={action}
-          className="flex flex-col gap-3 rounded border border-zinc-200 p-4"
+          className="flex flex-col gap-3 rounded-lg border border-line p-4"
         >
           <input type="hidden" name="order_id" value={orderId} />
           <input type="hidden" name="new_status" value={selected} />
-          <p className="text-sm font-medium">
+          <p className="text-[13px] font-medium text-ink">
             Passer la commande à « {ORDER_STATUS_LABELS[selected] ?? selected} »
           </p>
 
           {requiresContactAndReason(selected) && (
             <>
               <div className="flex flex-col gap-1">
-                <label htmlFor="contact_mode" className="text-sm font-medium">
+                <label
+                  htmlFor="contact_mode"
+                  className="text-[13px] font-medium text-ink"
+                >
                   Mode de contact avec le client{" "}
-                  <span aria-hidden="true" className="text-red-700">
+                  <span aria-hidden="true" className="text-primary">
                     *
                   </span>
                 </label>
@@ -100,7 +103,7 @@ export const StatusActions = ({
                   id="contact_mode"
                   name="contact_mode"
                   required
-                  className="rounded border border-zinc-300 bg-white px-3 py-2"
+                  className="rounded-lg border border-line bg-white px-3 py-2"
                 >
                   <option value="">— Choisir —</option>
                   {CONTACT_MODES.map((mode) => (
@@ -111,9 +114,12 @@ export const StatusActions = ({
                 </select>
               </div>
               <div className="flex flex-col gap-1">
-                <label htmlFor="reason" className="text-sm font-medium">
+                <label
+                  htmlFor="reason"
+                  className="text-[13px] font-medium text-ink"
+                >
                   Motif{" "}
-                  <span aria-hidden="true" className="text-red-700">
+                  <span aria-hidden="true" className="text-primary">
                     *
                   </span>
                 </label>
@@ -122,7 +128,7 @@ export const StatusActions = ({
                   name="reason"
                   rows={2}
                   required
-                  className="rounded border border-zinc-300 px-3 py-2"
+                  className="rounded-lg border border-line px-3 py-2"
                 />
               </div>
             </>
@@ -132,14 +138,14 @@ export const StatusActions = ({
             <button
               type="submit"
               disabled={pending}
-              className="rounded bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark disabled:opacity-60"
             >
               {pending ? "Mise à jour…" : "Confirmer"}
             </button>
             <button
               type="button"
               onClick={() => setSelected(null)}
-              className="rounded border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50"
+              className="rounded-lg border border-line px-4 py-2 text-sm hover:bg-bg"
             >
               Annuler
             </button>

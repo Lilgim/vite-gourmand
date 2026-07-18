@@ -27,7 +27,7 @@ export default async function ModifierMenuPage({ params }: PageProps) {
 
   return (
     <div className="mt-6 max-w-2xl">
-      <h1 className="text-2xl font-bold">Modifier : {menu.title}</h1>
+      <h1 className="text-2xl">Modifier : {menu.title}</h1>
       <MenuForm
         action={updateMenu}
         themes={themes}

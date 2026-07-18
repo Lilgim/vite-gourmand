@@ -9,15 +9,13 @@ export const metadata: Metadata = {
 export default function EntreprisePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-3xl font-bold">
-        Vite &amp; Gourmand, traiteur bordelais
-      </h1>
+      <h1 className="text-3xl">Vite &amp; Gourmand, traiteur bordelais</h1>
 
       <section aria-labelledby="titre-histoire" className="mt-8">
-        <h2 id="titre-histoire" className="text-xl font-bold">
+        <h2 id="titre-histoire" className="text-xl">
           Notre histoire
         </h2>
-        <p className="mt-3 text-zinc-700">
+        <p className="mt-3 text-ink">
           Fondée en 2015 au cœur de Bordeaux, Vite &amp; Gourmand est née de
           l'envie de faire voyager la cuisine du Sud-Ouest sur les tables des
           grands événements. D'abord spécialisée dans les cocktails
@@ -27,10 +25,10 @@ export default function EntreprisePage() {
       </section>
 
       <section aria-labelledby="titre-valeurs" className="mt-8">
-        <h2 id="titre-valeurs" className="text-xl font-bold">
+        <h2 id="titre-valeurs" className="text-xl">
           Nos engagements
         </h2>
-        <ul className="mt-3 list-disc space-y-2 pl-6 text-zinc-700">
+        <ul className="mt-3 list-disc space-y-2 pl-6 text-ink">
           <li>
             Des produits frais et de saison, sourcés auprès de producteurs de
             Nouvelle-Aquitaine.
@@ -45,10 +43,10 @@ export default function EntreprisePage() {
       </section>
 
       <section aria-labelledby="titre-equipe" className="mt-8">
-        <h2 id="titre-equipe" className="text-xl font-bold">
+        <h2 id="titre-equipe" className="text-xl">
           L'équipe
         </h2>
-        <p className="mt-3 text-zinc-700">
+        <p className="mt-3 text-ink">
           Autour du chef fondateur, une brigade de cuisiniers, pâtissiers et
           maîtres d'hôtel prépare et sert chaque réception. C'est cette même
           équipe qui répond à vos demandes, prépare vos commandes et assure le

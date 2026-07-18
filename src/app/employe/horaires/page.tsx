@@ -9,8 +9,8 @@ export default async function EmployeHorairesPage() {
 
   return (
     <div className="mt-6 max-w-xl">
-      <h1 className="text-2xl font-bold">Horaires d'ouverture</h1>
-      <p className="mt-2 text-sm text-zinc-600">
+      <h1 className="text-2xl">Horaires d'ouverture</h1>
+      <p className="mt-2 text-sm text-muted">
         Ces horaires sont affichés sur l'accueil et la page contact.
       </p>
       <HoursForm

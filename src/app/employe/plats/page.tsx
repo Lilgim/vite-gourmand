@@ -14,29 +14,29 @@ export default async function EmployePlatsPage() {
 
   return (
     <div className="mt-6">
-      <h1 className="text-2xl font-bold">Plats</h1>
+      <h1 className="text-2xl">Plats</h1>
 
       <section
         aria-labelledby="titre-nouveau-plat"
-        className="mt-4 max-w-xl rounded border border-zinc-200 bg-zinc-50 p-4"
+        className="mt-4 max-w-xl rounded-lg border border-line bg-surface p-4"
       >
-        <h2 id="titre-nouveau-plat" className="text-lg font-bold">
+        <h2 id="titre-nouveau-plat" className="text-lg">
           Créer un plat
         </h2>
         <DishForm allergens={allergens} />
       </section>
 
       <section aria-labelledby="titre-liste-plats" className="mt-8">
-        <h2 id="titre-liste-plats" className="text-lg font-bold">
+        <h2 id="titre-liste-plats" className="text-lg">
           Plats existants ({dishes.length})
         </h2>
         <ul className="mt-3 grid gap-4 lg:grid-cols-2">
           {dishes.map((dish) => (
-            <li key={dish.id} className="rounded border border-zinc-200 p-4">
+            <li key={dish.id} className="rounded-lg border border-line p-4">
               <details>
                 <summary className="cursor-pointer font-medium">
                   {dish.name}
-                  <span className="ml-2 text-xs text-zinc-500">
+                  <span className="ml-2 text-xs text-muted">
                     {dish.menu_count > 0
                       ? `${dish.menu_count} menu(s)`
                       : "non utilisé"}

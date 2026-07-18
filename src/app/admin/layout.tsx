@@ -9,26 +9,26 @@ export default async function AdminLayout({
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
-      <p className="text-sm font-medium text-emerald-800">Administration</p>
+      <p className="text-sm font-medium text-primary">Administration</p>
       <nav
         aria-label="Navigation de l'administration"
-        className="mt-2 flex flex-wrap gap-2 border-b border-zinc-200 pb-3 text-sm"
+        className="mt-2 flex flex-wrap gap-2 border-b border-line pb-3 text-sm"
       >
         <Link
           href="/admin"
-          className="rounded border border-zinc-300 px-3 py-1.5 hover:bg-zinc-50"
+          className="rounded-lg border border-line px-3 py-1.5 hover:bg-bg"
         >
           Statistiques
         </Link>
         <Link
           href="/admin/employes"
-          className="rounded border border-zinc-300 px-3 py-1.5 hover:bg-zinc-50"
+          className="rounded-lg border border-line px-3 py-1.5 hover:bg-bg"
         >
           Comptes employés
         </Link>
         <Link
           href="/employe"
-          className="rounded border border-zinc-300 px-3 py-1.5 hover:bg-zinc-50"
+          className="rounded-lg border border-line px-3 py-1.5 hover:bg-bg"
         >
           Espace employé
         </Link>

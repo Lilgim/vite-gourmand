@@ -25,28 +25,31 @@ export default async function EmployeOrderPage({ params }: PageProps) {
 
   return (
     <div className="mt-6">
-      <nav aria-label="Fil d'Ariane" className="text-sm text-zinc-600">
+      <nav
+        aria-label="Fil d'Ariane"
+        className="text-xs uppercase tracking-widest text-muted"
+      >
         <Link href="/employe" className="hover:underline">
           Commandes
         </Link>{" "}
         / <span aria-current="page">Commande n° {order.id}</span>
       </nav>
 
-      <h1 className="mt-2 text-2xl font-bold">
+      <h1 className="mt-2 text-2xl">
         Commande n° {order.id} — {order.client_name}
       </h1>
-      <p className="mt-2 inline-block rounded bg-emerald-50 px-3 py-1.5 font-medium text-emerald-900">
+      <p className="mt-2 inline-block rounded-lg bg-badge px-3 py-1.5 font-medium text-primary">
         {ORDER_STATUS_LABELS[order.current_status] ?? order.current_status}
       </p>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="titre-infos-commande">
-          <h2 id="titre-infos-commande" className="text-lg font-bold">
+          <h2 id="titre-infos-commande" className="text-lg">
             Détails
           </h2>
           <dl className="mt-3 space-y-2 text-sm">
-            <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-              <dt className="text-zinc-600">Client</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-2">
+              <dt className="text-muted">Client</dt>
               <dd className="text-right font-medium">
                 {order.client_name}
                 <br />
@@ -59,16 +62,16 @@ export default async function EmployeOrderPage({ params }: PageProps) {
                 )}
               </dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-              <dt className="text-zinc-600">Menu</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-2">
+              <dt className="text-muted">Menu</dt>
               <dd className="font-medium">{order.menu_title}</dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-              <dt className="text-zinc-600">Convives</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-2">
+              <dt className="text-muted">Convives</dt>
               <dd className="font-medium">{order.people_count}</dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-              <dt className="text-zinc-600">Événement</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-2">
+              <dt className="text-muted">Événement</dt>
               <dd className="text-right font-medium">
                 {new Date(order.event_date).toLocaleDateString("fr-FR", {
                   dateStyle: "long",
@@ -79,12 +82,12 @@ export default async function EmployeOrderPage({ params }: PageProps) {
                 {order.event_city}
               </dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-              <dt className="text-zinc-600">GSM jour J</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-2">
+              <dt className="text-muted">GSM jour J</dt>
               <dd className="font-medium">{order.phone}</dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-              <dt className="text-zinc-600">
+            <div className="flex justify-between gap-4 border-b border-line pb-2">
+              <dt className="text-muted">
                 Total (livraison{" "}
                 {Number(order.delivery_fee) > 0
                   ? euros(order.delivery_fee)
@@ -101,7 +104,7 @@ export default async function EmployeOrderPage({ params }: PageProps) {
         </section>
 
         <section aria-labelledby="titre-actions">
-          <h2 id="titre-actions" className="text-lg font-bold">
+          <h2 id="titre-actions" className="text-lg">
             Faire progresser la commande
           </h2>
           <div className="mt-3">
@@ -115,8 +118,8 @@ export default async function EmployeOrderPage({ params }: PageProps) {
             )}
           </div>
 
-          <h2 className="mt-8 text-lg font-bold">Historique</h2>
-          <ol className="mt-3 space-y-3 border-l-2 border-emerald-200 pl-4">
+          <h2 className="mt-8 text-lg">Historique</h2>
+          <ol className="mt-3 space-y-3 border-l-2 border-line pl-4">
             {history.map((entry) => (
               <li
                 key={`${entry.status}-${entry.created_at}`}
@@ -125,14 +128,14 @@ export default async function EmployeOrderPage({ params }: PageProps) {
                 <p className="font-medium">
                   {ORDER_STATUS_LABELS[entry.status] ?? entry.status}
                 </p>
-                <p className="text-zinc-600">
+                <p className="text-muted">
                   {new Date(entry.created_at).toLocaleString("fr-FR", {
                     dateStyle: "long",
                     timeStyle: "short",
                   })}
                 </p>
                 {entry.reason && (
-                  <p className="text-zinc-600">
+                  <p className="text-muted">
                     Motif : {entry.reason}
                     {entry.contact_mode && ` (contact : ${entry.contact_mode})`}
                   </p>

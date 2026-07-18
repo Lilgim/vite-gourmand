@@ -6,12 +6,12 @@ export const Header = async () => {
   const user = await getCurrentUser();
 
   return (
-    <header className="border-b border-zinc-200 bg-white">
+    <header className="border-b border-line bg-surface">
       <nav
         aria-label="Navigation principale"
         className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-3"
       >
-        <Link href="/" className="text-lg font-bold text-emerald-800">
+        <Link href="/" className="font-display text-xl text-primary">
           Vite &amp; Gourmand
         </Link>
         <div className="ml-auto flex flex-wrap items-center gap-4 text-sm">
@@ -33,7 +33,7 @@ export const Header = async () => {
               <form action={logout}>
                 <button
                   type="submit"
-                  className="rounded border border-zinc-300 px-3 py-1 hover:bg-zinc-50"
+                  className="rounded-lg border border-line bg-surface px-3 py-1 hover:bg-bg"
                 >
                   Se déconnecter
                 </button>
@@ -46,7 +46,7 @@ export const Header = async () => {
               </Link>
               <Link
                 href="/inscription"
-                className="rounded bg-emerald-700 px-3 py-1 text-white hover:bg-emerald-800"
+                className="rounded-lg bg-primary px-3 py-1 text-white hover:bg-primary-dark"
               >
                 Créer un compte
               </Link>

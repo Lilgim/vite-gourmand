@@ -10,27 +10,27 @@ export default async function AdminEmployesPage() {
 
   return (
     <div className="mt-6">
-      <h1 className="text-2xl font-bold">Comptes employés</h1>
+      <h1 className="text-2xl">Comptes employés</h1>
 
       <section
         aria-labelledby="titre-creer-employe"
-        className="mt-4 max-w-xl rounded border border-zinc-200 bg-zinc-50 p-4"
+        className="mt-4 max-w-xl rounded-lg border border-line bg-surface p-4"
       >
-        <h2 id="titre-creer-employe" className="text-lg font-bold">
+        <h2 id="titre-creer-employe" className="text-lg">
           Créer un compte employé
         </h2>
         <EmployeeForm />
       </section>
 
       <section aria-labelledby="titre-liste-employes" className="mt-8">
-        <h2 id="titre-liste-employes" className="text-lg font-bold">
+        <h2 id="titre-liste-employes" className="text-lg">
           Employés ({employees.length})
         </h2>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">Liste des comptes employés</caption>
             <thead>
-              <tr className="border-b border-zinc-300 text-left">
+              <tr className="border-b border-line text-left">
                 <th scope="col" className="py-2 pr-4">
                   Nom
                 </th>
@@ -49,7 +49,7 @@ export default async function AdminEmployesPage() {
               {employees.map((employee) => (
                 <tr
                   key={employee.id}
-                  className="border-b border-zinc-200 last:border-0"
+                  className="border-b border-line last:border-0"
                 >
                   <td className="py-2 pr-4 font-medium">
                     {employee.first_name} {employee.last_name}
