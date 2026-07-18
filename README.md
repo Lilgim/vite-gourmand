@@ -21,7 +21,7 @@ Projet réalisé dans le cadre du Titre Professionnel Développeur Web et Web Mo
 | Lint / format | Biome | Un seul outil rapide pour lint + format |
 | Runtime de dev | Bun | Installation et exécution rapides ; compatible npm |
 
-L'hébergement (application, PostgreSQL, MongoDB) sera choisi et documenté dans `.agent-forge/DECISIONS.md` avant le déploiement.
+L'hébergement (application, PostgreSQL, MongoDB) : VPS personnel avec Docker Compose dédié et HTTPS automatique — voir la section « Déploiement en production » et `.agent-forge/DECISIONS.md` (D-003, D-004).
 
 ## Démarrage local
 
@@ -81,6 +81,43 @@ Sans configuration SMTP (`SMTP_HOST` vide), l'application fonctionne en
 du serveur au lieu d'être envoyé — c'est le mode utilisé en développement
 et en démonstration. Renseigner les variables `SMTP_*` du `.env` bascule
 sur un envoi réel via nodemailer.
+
+## Déploiement en production
+
+L'application se déploie sur un serveur Linux avec Docker : une stack Compose
+isolée (`docker-compose.prod.yml`) contenant l'application (image multistage,
+sortie standalone de Next), PostgreSQL, MongoDB (tous deux **sans port
+publié**) et Caddy pour le HTTPS automatique (Let's Encrypt).
+
+Prérequis : un enregistrement DNS A du domaine vers l'IP du serveur
+(propagé **avant** le premier démarrage, sinon l'obtention du certificat
+échoue), et les ports 80/443 ouverts.
+
+```bash
+# 1. Sur le serveur
+git clone https://github.com/Lilgim/vite-gourmand.git && cd vite-gourmand
+
+# 2. Secrets (générés sur place, jamais commités)
+cp .env.production.example .env
+nano .env   # DOMAIN, ACME_EMAIL, POSTGRES_PASSWORD, AUTH_SECRET
+
+# 3. Démarrage (build + bases + TLS)
+docker compose -f docker-compose.prod.yml up -d --build
+
+# 4. Données de démonstration (schéma + seed + stats Mongo)
+docker compose -f docker-compose.prod.yml exec app node scripts/reset-db.ts
+
+# 5. Vérifications
+docker compose -f docker-compose.prod.yml ps   # tous les services "healthy"
+curl -I https://$DOMAIN                        # 200 + en-têtes de sécurité
+```
+
+Si un reverse proxy occupe déjà les ports 80/443 sur le serveur : démarrer la
+stack sans Caddy (`docker compose -f docker-compose.prod.yml up -d --build app`)
+et faire pointer le proxy existant vers `http://127.0.0.1:3001`
+(port ajustable via `APP_PORT` dans le `.env`).
+
+Mise à jour : `git pull && docker compose -f docker-compose.prod.yml up -d --build app`.
 
 ## Organisation git
 

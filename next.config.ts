@@ -28,6 +28,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Sortie autonome pour l'image Docker de production (node server.js).
+  // Conditionnée : `next start` (utilisé par Playwright en local) ne sert
+  // pas une build standalone.
+  output: process.env.NEXT_OUTPUT_STANDALONE === "1" ? "standalone" : undefined,
   // Fixe la racine du projet : un lockfile parasite existe plus haut dans l'arborescence
   turbopack: { root: __dirname },
   poweredByHeader: false,
