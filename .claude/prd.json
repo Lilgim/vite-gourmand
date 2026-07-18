@@ -42,7 +42,7 @@
       "title": "Espace client : historique, suivi, profil",
       "description": "Historique détaillé des commandes, suivi horodaté des statuts, modification/annulation possible avant acceptation (sauf changement de menu), modification des données personnelles.",
       "priority": 6,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-reviews",

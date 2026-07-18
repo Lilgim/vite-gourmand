@@ -51,6 +51,27 @@ export const getOrderForUser = (
     [orderId, userId],
   );
 
+export type OrderSummary = {
+  id: number;
+  menu_title: string;
+  event_date: string;
+  people_count: number;
+  total_price: string;
+  current_status: string;
+  created_at: string;
+};
+
+export const getOrdersForUser = (userId: number): Promise<OrderSummary[]> =>
+  query<OrderSummary>(
+    `SELECT o.id, m.title AS menu_title, o.event_date::text, o.people_count,
+            o.total_price::text, o.current_status, o.created_at::text
+       FROM orders o
+       JOIN menus m ON m.id = o.menu_id
+      WHERE o.user_id = $1
+      ORDER BY o.created_at DESC`,
+    [userId],
+  );
+
 export type StatusHistoryEntry = {
   status: string;
   created_at: string;

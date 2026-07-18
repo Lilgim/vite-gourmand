@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { createOrder } from "@/app/actions/orders";
 import { FormField } from "@/components/form-field";
 import {
   computePriceDetail,
@@ -9,38 +8,54 @@ import {
   formatEuros,
   isDeliveryFree,
 } from "@/lib/pricing";
-import { initialFormState } from "@/lib/validation";
+import { type FormState, initialFormState } from "@/lib/validation";
 
-type OrderFormProps = {
-  menuId: number;
-  minPeople: number;
-  pricePerPerson: number;
-  defaultAddress: string;
-  defaultPostalCode: string;
-  defaultCity: string;
-  defaultPhone: string;
+export type OrderFormDefaults = {
+  peopleCount?: number;
+  eventDate?: string;
+  eventTime?: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  phone?: string;
+  distanceKm?: number;
 };
 
-// Le détail du prix est recalculé à chaque saisie et affiché AVANT la
-// validation (exigence du sujet). Le calcul faisant foi reste côté serveur.
+type OrderFormProps = {
+  action: (prev: FormState, formData: FormData) => Promise<FormState>;
+  hiddenFieldName: "menu_id" | "order_id";
+  hiddenFieldValue: number;
+  minPeople: number;
+  pricePerPerson: number;
+  defaults: OrderFormDefaults;
+  submitLabel: string;
+  pendingLabel: string;
+};
+
+// Formulaire partagé création/modification de commande. Le détail du prix
+// est recalculé à chaque saisie et affiché AVANT la validation (exigence
+// du sujet) ; le calcul faisant foi reste côté serveur.
 export const OrderForm = ({
-  menuId,
+  action: serverAction,
+  hiddenFieldName,
+  hiddenFieldValue,
   minPeople,
   pricePerPerson,
-  defaultAddress,
-  defaultPostalCode,
-  defaultCity,
-  defaultPhone,
+  defaults,
+  submitLabel,
+  pendingLabel,
 }: OrderFormProps) => {
   const [state, action, pending] = useActionState(
-    createOrder,
+    serverAction,
     initialFormState,
   );
   const errors = state.status === "error" ? state.errors : undefined;
 
-  const [peopleCount, setPeopleCount] = useState(minPeople);
-  const [city, setCity] = useState(defaultCity);
-  const [distanceKm, setDistanceKm] = useState(0);
+  const [peopleCount, setPeopleCount] = useState(
+    defaults.peopleCount ?? minPeople,
+  );
+  const [city, setCity] = useState(defaults.city ?? "");
+  const [distanceKm, setDistanceKm] = useState(defaults.distanceKm ?? 0);
 
   const freeDelivery = isDeliveryFree(city);
   const price = computePriceDetail({
@@ -53,12 +68,20 @@ export const OrderForm = ({
 
   return (
     <form action={action} className="mt-6 flex flex-col gap-4" noValidate>
-      <input type="hidden" name="menu_id" value={menuId} />
+      <input type="hidden" name={hiddenFieldName} value={hiddenFieldValue} />
 
       {state.status === "error" && state.message && (
         <p
           role="alert"
           className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+        >
+          {state.message}
+        </p>
+      )}
+      {state.status === "success" && state.message && (
+        <p
+          role="status"
+          className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
         >
           {state.message}
         </p>
@@ -100,6 +123,7 @@ export const OrderForm = ({
           name="event_date"
           type="date"
           required
+          defaultValue={defaults.eventDate}
           errors={errors?.event_date}
         />
         <FormField
@@ -107,6 +131,7 @@ export const OrderForm = ({
           name="event_time"
           type="time"
           required
+          defaultValue={defaults.eventTime}
           errors={errors?.event_time}
         />
       </div>
@@ -116,7 +141,7 @@ export const OrderForm = ({
         name="event_address"
         required
         autoComplete="street-address"
-        defaultValue={defaultAddress}
+        defaultValue={defaults.address}
         errors={errors?.event_address}
       />
       <div className="grid gap-4 sm:grid-cols-2">
@@ -125,7 +150,7 @@ export const OrderForm = ({
           name="event_postal_code"
           required
           autoComplete="postal-code"
-          defaultValue={defaultPostalCode}
+          defaultValue={defaults.postalCode}
           errors={errors?.event_postal_code}
         />
         <div className="flex flex-col gap-1">
@@ -193,7 +218,7 @@ export const OrderForm = ({
         type="tel"
         required
         autoComplete="tel"
-        defaultValue={defaultPhone}
+        defaultValue={defaults.phone}
         errors={errors?.phone}
       />
 
@@ -240,7 +265,7 @@ export const OrderForm = ({
         disabled={pending}
         className="rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
       >
-        {pending ? "Validation en cours…" : "Valider ma commande"}
+        {pending ? pendingLabel : submitLabel}
       </button>
     </form>
   );

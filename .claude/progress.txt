@@ -62,3 +62,14 @@ Learnings:
 - Server Action + stock : décrément conditionnel (UPDATE ... WHERE stock > 0) dans withTransaction ; stats MongoDB en best-effort (jamais bloquantes).
 - allowImportingTsExtensions requis pour que tsc accepte les imports .ts des scripts node.
 Files: src/lib/pricing.ts, src/lib/validation.ts, src/app/actions/orders.ts, src/app/commander/[id]/*, src/app/compte/commandes/[id]/page.tsx, src/lib/queries/orders.ts, src/lib/db.ts, scripts/check-pricing.ts, src/proxy.ts
+
+=== Iteration 6 (2026-07-14 23:25) ===
+Story: story-order-tracking - Espace client : historique, suivi, profil
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test session réelle — /compte liste les commandes + profil pré-rempli, commande submitted → boutons Modifier/Annuler présents, commande completed → boutons absents, page modifier pré-remplie (20 convives) avec menu verrouillé.
+Learnings:
+- revalidatePath en Next 16.2 : 2e argument = "layout" | "page" (le profil cacheLife "max" c'est revalidateTag, pas revalidatePath).
+- OrderForm généralisé (action + hiddenField en props) : un seul composant pour créer/modifier — un Server Action passé en prop à un composant client est sérialisable et valide.
+- Confirmation destructive sans window.confirm (bloque l'automatisation) : bouton en deux temps armé/confirmé.
+- updateOrder repart TOUJOURS du menu_id stocké en base, jamais du formulaire (règle « menu non modifiable » inviolable côté serveur).
+Files: src/app/actions/account.ts, src/app/compte/{page,profile-form}.tsx, src/app/compte/commandes/[id]/{page,cancel-button}.tsx, src/app/compte/commandes/[id]/modifier/page.tsx, src/components/order-form.tsx (déplacé+généralisé), src/lib/queries/orders.ts, src/lib/validation.ts

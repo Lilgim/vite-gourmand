@@ -25,6 +25,28 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Le mot de passe est obligatoire"),
 });
 
+export const profileSchema = z.object({
+  first_name: z.string().trim().min(1, "Le prénom est obligatoire").max(100),
+  last_name: z.string().trim().min(1, "Le nom est obligatoire").max(100),
+  phone: z
+    .string()
+    .trim()
+    .regex(
+      /^(\+33|0)[1-9]\d{8}$/,
+      "Numéro de téléphone invalide (format français)",
+    )
+    .optional()
+    .or(z.literal("")),
+  address: z.string().trim().max(255).optional().or(z.literal("")),
+  postal_code: z
+    .string()
+    .trim()
+    .regex(/^\d{5}$/, "Code postal invalide (5 chiffres)")
+    .optional()
+    .or(z.literal("")),
+  city: z.string().trim().max(100).optional().or(z.literal("")),
+});
+
 // Le minimum de personnes dépend du menu : schéma construit à la volée.
 export const createOrderSchema = (minPeople: number) =>
   z.object({
