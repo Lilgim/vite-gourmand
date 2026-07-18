@@ -15,3 +15,15 @@ Learnings:
 - Premier bind d'un port docker parfois refusé juste après un up raté (relais WSL pas libéré) → retry suffit.
 Files: docker-compose.yml, sql/01_create.sql, sql/02_seed.sql, src/lib/{env,db,mongo}.ts, scripts/check-db.ts, .env.example
 Workflow: CodeRabbit installé par lilgim → chaque story part en PR feature→dev pour review indépendante avant merge.
+
+=== Iteration 2 (2026-07-14 21:05) ===
+Story: story-auth - Authentification et rôles
+Status: PASSED
+Validations réelles : lint/typecheck/build OK (proxy détecté), smoke test serveur prod — /, /connexion, /inscription en 200, /compte sans cookie → 307 /connexion.
+Learnings:
+- Next 16 : middleware.ts renommé proxy.ts (export function proxy) ; cookies()/params/searchParams async obligatoires.
+- Pattern DAL du guide officiel : getCurrentUser mémoïsé avec React cache(), proxy = contrôle optimiste cookie uniquement, jamais de requête DB dans le proxy.
+- Fichier "use server" : seuls les exports doivent être async ; les helpers non exportés peuvent être sync.
+- CodeRabbit ne review pas les PR vers dev par défaut (base non-default) → .coderabbit.yaml avec base_branches [dev, main] + trigger manuel @coderabbitai review.
+Files: src/lib/{auth,validation}.ts, src/app/actions/auth.ts, src/app/(auth)/**, src/app/compte/page.tsx, src/components/{header,form-field}.tsx, src/proxy.ts, .coderabbit.yaml
+PRs: #1 (db-foundations), #2 (auth) — reviews CodeRabbit déclenchées, à traiter avant merge.
