@@ -1,0 +1,132 @@
+=== Init (2026-07-14 20:10) ===
+Boucle Ralph initialisée. 12 stories dérivées de .agent-forge/PLAN.md et du brief ECF.
+Environnement : Windows 11, Bun 1.3.6, Docker 29.2 + Compose v5 (PostgreSQL/MongoDB en conteneurs), Next.js 16.2.10.
+Gitflow : une branche feature/<story> depuis dev, merge --no-ff dans dev après validation (lint + typecheck + build + tests).
+Contrainte : dépôt public — aucun secret, aucun contenu Studi.
+
+=== Iteration 1 (2026-07-14 20:35) ===
+Story: story-db - Fondations données : Docker, scripts SQL, clients PG/Mongo
+Status: PASSED
+Validations réelles : 01_create.sql + 02_seed.sql sur base vide (COMMIT x2), check-db.ts (6 menus, 3 users, mongo ping 1), biome 10 fichiers OK, tsc OK, next build OK.
+Learnings:
+- Un PostgreSQL natif Windows occupe 5432 → conteneurs mappés 5433 (pg) / 27018 (mongo).
+- Driver mongodb (bson) incompatible Bun sur Windows (node:v8 isBuildingSnapshot) → scripts utilitaires avec `node --env-file=.env` ; l'app Next tourne sur Node donc pas d'impact.
+- Out-File PowerShell écrit un BOM UTF-8 qui corrompt la 1re clé d'un .env → écrire via [IO.File]::WriteAllText sans BOM.
+- Premier bind d'un port docker parfois refusé juste après un up raté (relais WSL pas libéré) → retry suffit.
+Files: docker-compose.yml, sql/01_create.sql, sql/02_seed.sql, src/lib/{env,db,mongo}.ts, scripts/check-db.ts, .env.example
+Workflow: CodeRabbit installé par lilgim → chaque story part en PR feature→dev pour review indépendante avant merge.
+
+=== Iteration 2 (2026-07-14 21:05) ===
+Story: story-auth - Authentification et rôles
+Status: PASSED
+Validations réelles : lint/typecheck/build OK (proxy détecté), smoke test serveur prod — /, /connexion, /inscription en 200, /compte sans cookie → 307 /connexion.
+Learnings:
+- Next 16 : middleware.ts renommé proxy.ts (export function proxy) ; cookies()/params/searchParams async obligatoires.
+- Pattern DAL du guide officiel : getCurrentUser mémoïsé avec React cache(), proxy = contrôle optimiste cookie uniquement, jamais de requête DB dans le proxy.
+- Fichier "use server" : seuls les exports doivent être async ; les helpers non exportés peuvent être sync.
+- CodeRabbit ne review pas les PR vers dev par défaut (base non-default) → .coderabbit.yaml avec base_branches [dev, main] + trigger manuel @coderabbitai review.
+Files: src/lib/{auth,validation}.ts, src/app/actions/auth.ts, src/app/(auth)/**, src/app/compte/page.tsx, src/components/{header,form-field}.tsx, src/proxy.ts, .coderabbit.yaml
+PRs: #1 (db-foundations), #2 (auth) — reviews CodeRabbit déclenchées, à traiter avant merge.
+
+=== Iteration 3 (2026-07-14 21:30) ===
+Story: story-public-pages - Pages publiques et layout
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test serveur prod — accueil affiche l'avis approuvé seedé et les horaires depuis PG, /entreprise /contact /mentions-legales /cgv en 200, règle des 600 € visible dans les CGV.
+Learnings:
+- Biome a11y strict : pas d'aria-label sur <p> → pattern aria-hidden pour les étoiles + span sr-only pour le texte lecteur d'écran.
+- Le sujet demande de "consulter" contact → page coordonnées + horaires, pas de formulaire (scope minimal conforme).
+Files: src/app/{page,entreprise/page,contact/page,mentions-legales/page,cgv/page}.tsx, src/components/footer.tsx, src/lib/queries/home.ts, src/app/layout.tsx
+
+=== Iteration 4 (2026-07-14 22:00) ===
+Story: story-menus - Catalogue des menus avec filtres
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test — /menus rend 6 menus + filtres, /menus/1 rend plats/allergènes/galerie, /menus/999 et /menus/abc → 404, SVG servis en 200.
+Learnings:
+- PIÈGE ENCODAGE : (Get-Content -Raw) -replace | Set-Content casse l'UTF-8 d'un fichier accentué (mojibake) → toujours utiliser l'outil Edit pour modifier des fichiers existants, git checkout pour restaurer.
+- Filtres "sans rechargement" : composant client qui filtre en mémoire la liste passée par le Server Component — simple et défendable ; compteur de résultats en aria-live.
+- Visuels menus : SVG placeholders locaux dans public/images/menus/ (dépôt public → pas de photos sous licence) ; biome-ignore noImgElement pour <img> sur SVG locaux.
+- Agrégats SQL : LEFT JOIN LATERAL pour première image + array_agg DISTINCT ... FILTER pour les allergènes par menu.
+Files: src/lib/queries/menus.ts, src/app/menus/{page,menus-explorer}.tsx, src/app/menus/[id]/page.tsx, public/images/menus/*.svg, sql/02_seed.sql (.jpg→.svg)
+
+=== Reviews CodeRabbit PR1+PR2 (2026-07-14 22:20) ===
+PR1: 10 findings → 8 corrigés (loopback, CHECK montants/horaires, timeouts pool, check-db durci), 1 différé (trigger audit → couche applicative story-employee), 1 déjà couvert. PR2: 3 findings → UUID strict partagé, pool.on(error) avec garde HMR, 1 déjà corrigé. Classement dans .agent-forge/REVIEWS.md, réponses postées sur les PR.
+BLOQUANT WORKFLOW : merge des PR refusé par les permissions (règle projet « jamais de merge automatique de PR ») → les PR s'empilent (feature/N branchée sur feature/N-1), lilgim merge manuellement dans l'ordre 1→N.
+
+=== Iteration 5 (2026-07-14 22:50) ===
+Story: story-order - Tunnel de commande avec calcul de prix
+Status: PASSED
+Validations réelles : check-pricing.ts 5/5 règles conformes ; lint/typecheck/build OK ; smoke test avec session réelle en base — formulaire rendu, détail du prix avant validation présent, champ distance masqué à Bordeaux, /commander anonyme → 307, cookie malformé → pas de 500.
+Learnings:
+- BUG ATTRAPÉ par la vérification : arrondi flottant (7,655 € → 7,65 € au lieu de 7,66 €) → calculs monétaires en CENTIMES ENTIERS, jamais en euros flottants.
+- PS 5.1 : le header Cookie passé via -Headers est un header restreint JAMAIS envoyé → utiliser WebRequestSession + System.Net.Cookie pour tester des routes authentifiées.
+- Server Action + stock : décrément conditionnel (UPDATE ... WHERE stock > 0) dans withTransaction ; stats MongoDB en best-effort (jamais bloquantes).
+- allowImportingTsExtensions requis pour que tsc accepte les imports .ts des scripts node.
+Files: src/lib/pricing.ts, src/lib/validation.ts, src/app/actions/orders.ts, src/app/commander/[id]/*, src/app/compte/commandes/[id]/page.tsx, src/lib/queries/orders.ts, src/lib/db.ts, scripts/check-pricing.ts, src/proxy.ts
+
+=== Iteration 6 (2026-07-14 23:25) ===
+Story: story-order-tracking - Espace client : historique, suivi, profil
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test session réelle — /compte liste les commandes + profil pré-rempli, commande submitted → boutons Modifier/Annuler présents, commande completed → boutons absents, page modifier pré-remplie (20 convives) avec menu verrouillé.
+Learnings:
+- revalidatePath en Next 16.2 : 2e argument = "layout" | "page" (le profil cacheLife "max" c'est revalidateTag, pas revalidatePath).
+- OrderForm généralisé (action + hiddenField en props) : un seul composant pour créer/modifier — un Server Action passé en prop à un composant client est sérialisable et valide.
+- Confirmation destructive sans window.confirm (bloque l'automatisation) : bouton en deux temps armé/confirmé.
+- updateOrder repart TOUJOURS du menu_id stocké en base, jamais du formulaire (règle « menu non modifiable » inviolable côté serveur).
+Files: src/app/actions/account.ts, src/app/compte/{page,profile-form}.tsx, src/app/compte/commandes/[id]/{page,cancel-button}.tsx, src/app/compte/commandes/[id]/modifier/page.tsx, src/components/order-form.tsx (déplacé+généralisé), src/lib/queries/orders.ts, src/lib/validation.ts
+
+=== Iteration 7 (2026-07-14 23:55) ===
+Story: story-reviews - Avis clients avec modération
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test — commande completed avec avis → avis + statut de modération affichés sans formulaire ; commande submitted → pas de section avis ; commande passée en completed sans avis → formulaire notes 1-5 affiché. Garanties serveur : propriétaire + statut completed + unicité (double garde applicative + UNIQUE en base).
+Learnings:
+- Radios de notation stylées : input sr-only + label cliquable — accessible sans lib externe.
+- La modération (validation/refus employé) est portée par story-employee ; l'affichage public des seuls avis "approved" est déjà en place depuis story-public-pages.
+Files: src/app/actions/reviews.ts, src/app/compte/commandes/[id]/review-form.tsx, src/lib/queries/orders.ts, src/lib/validation.ts, src/app/compte/commandes/[id]/page.tsx
+
+=== Iteration 8 (2026-07-15 00:45) ===
+Story: story-employee - Espace employé
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test session employé — liste des commandes avec infos client, filtre par statut (completed → seule la commande 1 dans le tableau) et par client (camille), transitions proposées sur commande submitted (Acceptée/Annulée), pages menus/plats/horaires/avis en 200 ; session client sur /employe → redirigée par requireRole.
+Learnings:
+- PIÈGE Next : un composant client qui importe une constante d'un module "server-only" (qui tire pg) casse le build → module neutre src/lib/labels.ts pour les libellés partagés serveur/client.
+- Machine à états pure (src/lib/status.ts) : ORDER_TRANSITIONS + canTransition — transitions interdites refusées côté serveur, testable unitairement.
+- Faux positif de test : compter les occurrences d'un texte dans le HTML Next compte aussi le payload RSC sérialisé → vérifier le contenu métier (titres de menus), pas les libellés d'action.
+- Layout serveur comme garde de rôle : requireRole dans employe/layout.tsx protège toutes les sous-routes.
+Files: src/lib/{status,labels}.ts, src/app/actions/employee.ts, src/lib/queries/employee.ts, src/app/employe/** (layout, commandes, menus, plats, horaires, avis), src/lib/validation.ts (menuSchema, dishSchema, openingHoursSchema)
+
+=== Iteration 9 (2026-07-15 01:20) ===
+Story: story-admin - Espace administrateur et statistiques NoSQL
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; sync-stats.ts a rétabli 2 documents Mongo depuis PG ; smoke test — /admin affiche commandes par menu + CA total 1 034,86 € (agrégation MongoDB), filtre période juin → 547,20 € et 1 seule commande, création/désactivation employés OK ; employé sur /admin refoulé ; admin hérite bien de /employe.
+Learnings:
+- Les commandes seedées en SQL n'existaient pas dans Mongo → scripts/sync-stats.ts (rebuild complet order_stats depuis PG), aussi utile comme preuve « intégration de données NoSQL » pour l'ECF.
+- Graphique de comparaison sans lib : barres div proportionnelles + role=img + aria-label — RGAA-friendly et zéro dépendance.
+- toLocaleString fr-FR utilise une espace insécable étroite (U+202F) pour les milliers → les assertions de test doivent utiliser un motif souple.
+- Désactivation d'un employé = DELETE de ses sessions (révocation immédiate, avantage des sessions en base).
+Files: src/app/actions/admin.ts, src/lib/queries/admin.ts, src/app/admin/** (layout, page stats, employes), scripts/sync-stats.ts
+
+=== Iteration 10 (2026-07-15 02:15) ===
+Story: story-tests - Tests unitaires, intégration et parcours
+Status: PASSED
+Validations réelles : bun test 16 pass / 60 assertions (pricing + machine à états, transitions interdites incluses) ; Playwright 9 passed en 1.1m — parcours sériel complet : visiteur → inscription client → commande (détail prix 554,86 € vérifié AVANT validation) → employé fait progresser jusqu'à Terminée → avis client → modération → publication accueil → admin stats Mongo + comptes employés → contrôles de sécurité par rôle → responsive Pixel 7.
+Learnings:
+- PATTERN RSC & tests : après une Server Action + revalidatePath, le composant client (et son message de succès) peut être remplacé par le re-rendu serveur → asserter le CHANGEMENT D'ÉTAT VISIBLE (bouton suivant, liste vide, statut affiché), jamais le toast éphémère.
+- Playwright strict mode : textes présents en double (description vs nom de plat, badge vs historique, payload RSC) → exact:true, getByRole cell/textbox, ou .first().
+- Le label accessible inclut le texte du <label> entier ("Nom *") → getByLabel(/^Nom\b/) plutôt qu'exact:true.
+- Devices Playwright : iPhone = WebKit (non installé) → Pixel 7 pour tester mobile sur Chromium.
+- reset-db.ts (drop schema + 01_create + 02_seed + sync Mongo) = e2e reproductibles ET re-preuve permanente que les scripts SQL passent sur base vide.
+Files: tests/{pricing,status}.test.ts, e2e/{parcours,responsive}.spec.ts, playwright.config.ts, scripts/reset-db.ts, package.json (scripts test/db:reset/test:e2e)
+
+=== Fixes review PR5 + propagation (2026-07-15 03:00) ===
+4 findings CodeRabbit traités (cache() sur getMenuById, conteneur d'erreur aria unique, formatPrice 2 décimales, appartenance dans getOrderStatusHistory), propagés via merges order→tracking→reviews→employee→admin→tests (1 conflit résolu). Suite complète re-validée après propagation.
+
+=== Iteration 11 (2026-07-15) ===
+Story: story-hardening - Accessibilité, sécurité, emails
+Status: PASSED
+Validations réelles : headers vérifiés sur serveur réel (CSP, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy, x-powered-by supprimé) ; skip-link rendu ; email de confirmation loggé en mode test lors d'une vraie commande e2e (commande n°3, 554,86 €) ; 16 unit + 9 e2e verts ; README complété (install réelle, comptes démo, sécurité, mode test email).
+Learnings:
+- CSP avec Next : 'unsafe-inline' requis pour les styles/scripts inline de Next — compromis documenté, le reste verrouillé (object-src none, frame-ancestors none, form-action self).
+- Mode test email = exigence du sujet satisfaite sans dépendance externe : log structuré stdout si SMTP_HOST absent, nodemailer sinon, toujours best-effort.
+- CSRF : les Server Actions Next vérifient l'origine nativement — à documenter plutôt qu'à réimplémenter.
+Files: next.config.ts, src/lib/mailer.ts, src/app/actions/{orders,employee}.ts, src/app/layout.tsx, README.md
+Décision : hébergement = VPS perso de lilgim (ex-"VPS Alfred") + sous-domaine — en attente accès SSH pour story-delivery.

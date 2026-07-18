@@ -1,0 +1,10 @@
+# Configuration CodeRabbit — reviews automatiques sur le gitflow du projet
+language: fr-FR
+reviews:
+  profile: chill
+  auto_review:
+    enabled: true
+    # Le flux principal du projet est feature/* -> dev, puis dev -> main
+    base_branches:
+      - dev
+      - main

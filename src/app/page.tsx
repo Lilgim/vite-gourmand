@@ -1,65 +1,102 @@
-import Image from "next/image";
+import Link from "next/link";
+import { DAY_NAMES, formatTime } from "@/lib/labels";
+import { getApprovedReviews, getOpeningHours } from "@/lib/queries/home";
 
-export default function Home() {
+export default async function HomePage() {
+  const [reviews, hours] = await Promise.all([
+    getApprovedReviews(),
+    getOpeningHours(),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="mx-auto max-w-6xl px-4">
+      {/* Héros */}
+      <section className="py-16 text-center">
+        <h1 className="text-4xl font-bold text-emerald-900 sm:text-5xl">
+          Le traiteur bordelais de vos grands moments
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-zinc-600">
+          Mariages, anniversaires, événements d'entreprise : Vite &amp; Gourmand
+          compose des menus généreux avec des produits du Sud-Ouest, livrés
+          partout dans la métropole bordelaise.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link
+            href="/menus"
+            className="rounded bg-emerald-700 px-6 py-3 font-medium text-white hover:bg-emerald-800"
+          >
+            Découvrir nos menus
+          </Link>
+          <Link
+            href="/entreprise"
+            className="rounded border border-emerald-700 px-6 py-3 font-medium text-emerald-800 hover:bg-emerald-50"
+          >
+            Notre histoire
+          </Link>
+        </div>
+      </section>
+
+      {/* Avis validés */}
+      <section aria-labelledby="titre-avis" className="py-12">
+        <h2 id="titre-avis" className="text-2xl font-bold">
+          Ils nous ont fait confiance
+        </h2>
+        {reviews.length === 0 ? (
+          <p className="mt-4 text-zinc-600">
+            Aucun avis publié pour le moment.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        ) : (
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((review) => (
+              <li
+                key={review.id}
+                className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm"
+              >
+                <p className="text-amber-500">
+                  <span aria-hidden="true">
+                    {"★".repeat(review.rating)}
+                    <span className="text-zinc-300">
+                      {"★".repeat(5 - review.rating)}
+                    </span>
+                  </span>
+                  <span className="sr-only">Note : {review.rating} sur 5</span>
+                </p>
+                <p className="mt-2 text-sm text-zinc-700">{review.comment}</p>
+                <p className="mt-3 text-sm font-medium">{review.first_name}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Horaires */}
+      <section aria-labelledby="titre-horaires" className="py-12">
+        <h2 id="titre-horaires" className="text-2xl font-bold">
+          Nos horaires
+        </h2>
+        <table className="mt-6 w-full max-w-md border-collapse text-sm">
+          <caption className="sr-only">
+            Horaires d'ouverture de la boutique
+          </caption>
+          <tbody>
+            {hours.map((hour) => (
+              <tr
+                key={hour.day_of_week}
+                className="border-b border-zinc-200 last:border-0"
+              >
+                <th scope="row" className="py-2 text-left font-medium">
+                  {DAY_NAMES[hour.day_of_week]}
+                </th>
+                <td className="py-2 text-right">
+                  {hour.is_closed
+                    ? "Fermé"
+                    : `${formatTime(hour.open_time)} – ${formatTime(hour.close_time)}`}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </div>
   );
 }
