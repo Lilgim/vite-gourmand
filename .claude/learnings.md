@@ -1,5 +1,35 @@
 # Learnings — Vite & Gourmand (ECF TP DWWM)
-Dernière mise à jour : 2026-07-15
+Dernière mise à jour : 2026-07-18
+
+## Intégration + infra de déploiement (session du 18/07)
+
+**Ce qu'on a fait :** merge des 11 PR dans `dev` puis `dev`→`main` (PR 12), création de
+l'infra de prod (Dockerfile multistage, docker-compose.prod.yml isolé, Caddy HTTPS),
+validée par un vrai run local : stack complète healthy, seed dans le conteneur, smoke
+test HTTP 200 avec CSP. Audit visuel des 4 rôles (22 screenshots) : aucun bug
+fonctionnel, le design reste à faire.
+
+**Pourquoi ces choix :** build et runtime Node dans l'image (pas Bun) car le driver
+mongodb plante sous Bun (`node:v8 isBuildingSnapshot` non implémenté) — Bun reste
+l'outil de dev et d'installation des deps (bun.lock fait foi). Caddy plutôt que
+nginx+certbot : TLS Let's Encrypt automatique en 5 lignes, reproductible par un
+correcteur.
+
+**Concepts clés :**
+- `output: "standalone"` de Next casse `next start` → on le conditionne à une variable
+  d'env (`NEXT_OUTPUT_STANDALONE=1`) définie uniquement dans le Dockerfile.
+- Node 24 exécute le TypeScript nativement → `scripts/reset-db.ts` sert tel quel
+  d'init de données en prod (`docker compose exec app node scripts/reset-db.ts`).
+- `reuseExistingServer: true` de Playwright peut réutiliser un serveur zombie d'une
+  session précédente et faire échouer toute la suite : vérifier le port 3000 avant
+  d'accuser le code.
+
+**Fichiers modifiés :** Dockerfile, .dockerignore, docker-compose.prod.yml,
+deploy/Caddyfile, .env.production.example, next.config.ts, README.md,
+.agent-forge/{DECISIONS,VERIFICATION,STATE}.
+
+**À retenir :** valider une infra de déploiement = la faire tourner vraiment en local
+(compose up + seed + curl), pas juste écrire les fichiers.
 
 ## Vue d'ensemble
 
