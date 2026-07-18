@@ -27,3 +27,12 @@ Learnings:
 - CodeRabbit ne review pas les PR vers dev par défaut (base non-default) → .coderabbit.yaml avec base_branches [dev, main] + trigger manuel @coderabbitai review.
 Files: src/lib/{auth,validation}.ts, src/app/actions/auth.ts, src/app/(auth)/**, src/app/compte/page.tsx, src/components/{header,form-field}.tsx, src/proxy.ts, .coderabbit.yaml
 PRs: #1 (db-foundations), #2 (auth) — reviews CodeRabbit déclenchées, à traiter avant merge.
+
+=== Iteration 3 (2026-07-14 21:30) ===
+Story: story-public-pages - Pages publiques et layout
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test serveur prod — accueil affiche l'avis approuvé seedé et les horaires depuis PG, /entreprise /contact /mentions-legales /cgv en 200, règle des 600 € visible dans les CGV.
+Learnings:
+- Biome a11y strict : pas d'aria-label sur <p> → pattern aria-hidden pour les étoiles + span sr-only pour le texte lecteur d'écran.
+- Le sujet demande de "consulter" contact → page coordonnées + horaires, pas de formulaire (scope minimal conforme).
+Files: src/app/{page,entreprise/page,contact/page,mentions-legales/page,cgv/page}.tsx, src/components/footer.tsx, src/lib/queries/home.ts, src/app/layout.tsx

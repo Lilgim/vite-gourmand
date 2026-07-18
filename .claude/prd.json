@@ -21,7 +21,7 @@
       "title": "Pages publiques et layout",
       "description": "Layout global (header/nav/footer accessibles), accueil (présentation, avis validés, horaires), page entreprise, contact (formulaire), mentions légales, CGV (incluant règle des 600 € matériel non restitué après 10 jours ouvrés). Responsive.",
       "priority": 3,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-menus",
