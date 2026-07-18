@@ -13,14 +13,14 @@ export default async function ContactPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-3xl font-bold">Nous contacter</h1>
+      <h1 className="text-3xl">Nous contacter</h1>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
         <section aria-labelledby="titre-coordonnees">
-          <h2 id="titre-coordonnees" className="text-xl font-bold">
+          <h2 id="titre-coordonnees" className="text-xl">
             Coordonnées
           </h2>
-          <address className="mt-3 space-y-2 text-zinc-700 not-italic">
+          <address className="mt-3 space-y-2 text-ink not-italic">
             <p>
               Vite &amp; Gourmand
               <br />
@@ -30,7 +30,7 @@ export default async function ContactPage() {
             </p>
             <p>
               Téléphone :{" "}
-              <a href="tel:+33556000000" className="text-emerald-800 underline">
+              <a href="tel:+33556000000" className="text-primary underline">
                 05 56 00 00 00
               </a>
             </p>
@@ -38,20 +38,20 @@ export default async function ContactPage() {
               Email :{" "}
               <a
                 href="mailto:contact@vite-gourmand.example"
-                className="text-emerald-800 underline"
+                className="text-primary underline"
               >
                 contact@vite-gourmand.example
               </a>
             </p>
           </address>
-          <p className="mt-4 text-sm text-zinc-600">
+          <p className="mt-4 text-sm text-muted">
             Pour une demande de devis ou une question sur un menu, appelez-nous
             ou écrivez-nous : nous répondons sous 24 h ouvrées.
           </p>
         </section>
 
         <section aria-labelledby="titre-horaires-contact">
-          <h2 id="titre-horaires-contact" className="text-xl font-bold">
+          <h2 id="titre-horaires-contact" className="text-xl">
             Horaires
           </h2>
           <table className="mt-3 w-full border-collapse text-sm">
@@ -62,15 +62,17 @@ export default async function ContactPage() {
               {hours.map((hour) => (
                 <tr
                   key={hour.day_of_week}
-                  className="border-b border-zinc-200 last:border-0"
+                  className="border-b border-line last:border-0"
                 >
                   <th scope="row" className="py-2 text-left font-medium">
                     {DAY_NAMES[hour.day_of_week]}
                   </th>
                   <td className="py-2 text-right">
-                    {hour.is_closed
-                      ? "Fermé"
-                      : `${formatTime(hour.open_time)} – ${formatTime(hour.close_time)}`}
+                    {hour.is_closed ? (
+                      <span className="font-medium text-primary">Fermé</span>
+                    ) : (
+                      `${formatTime(hour.open_time)} – ${formatTime(hour.close_time)}`
+                    )}
                   </td>
                 </tr>
               ))}

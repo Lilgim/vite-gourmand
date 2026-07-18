@@ -19,7 +19,7 @@ export const CancelButton = ({ orderId }: CancelButtonProps) => {
     return (
       <p
         role="status"
-        className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+        className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
       >
         {state.message}
       </p>
@@ -32,7 +32,7 @@ export const CancelButton = ({ orderId }: CancelButtonProps) => {
       {state.status === "error" && state.message && (
         <p
           role="alert"
-          className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
         >
           {state.message}
         </p>
@@ -45,14 +45,14 @@ export const CancelButton = ({ orderId }: CancelButtonProps) => {
           <button
             type="submit"
             disabled={pending}
-            className="rounded bg-red-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-800 disabled:opacity-60"
+            className="rounded-lg bg-red-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-800 disabled:opacity-60"
           >
             {pending ? "Annulation…" : "Oui, annuler la commande"}
           </button>
           <button
             type="button"
             onClick={() => setArmed(false)}
-            className="rounded border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-50"
+            className="rounded-lg border border-line px-3 py-1.5 text-sm hover:bg-bg"
           >
             Non, la conserver
           </button>
@@ -61,7 +61,7 @@ export const CancelButton = ({ orderId }: CancelButtonProps) => {
         <button
           type="button"
           onClick={() => setArmed(true)}
-          className="self-start rounded border border-red-300 px-3 py-1.5 text-sm font-medium text-red-800 hover:bg-red-50"
+          className="self-start rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-800 hover:bg-red-50"
         >
           Annuler la commande
         </button>

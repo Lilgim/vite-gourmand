@@ -27,7 +27,7 @@ export const ToggleEmployeeButton = ({
         type="submit"
         disabled={pending}
         className={`underline disabled:opacity-60 ${
-          isActive ? "text-red-800" : "text-emerald-800"
+          isActive ? "text-red-800" : "text-primary"
         }`}
       >
         {isActive ? "Désactiver" : "Réactiver"}

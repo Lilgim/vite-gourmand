@@ -24,21 +24,21 @@ export default async function EmployeOrdersPage({
 
   return (
     <div className="mt-6">
-      <h1 className="text-2xl font-bold">Commandes</h1>
+      <h1 className="text-2xl">Commandes</h1>
 
       <form
         method="get"
-        className="mt-4 flex flex-wrap items-end gap-4 rounded border border-zinc-200 bg-zinc-50 p-4"
+        className="mt-4 flex flex-wrap items-end gap-4 rounded-lg border border-line bg-surface p-4"
       >
         <div className="flex flex-col gap-1">
-          <label htmlFor="statut" className="text-sm font-medium">
+          <label htmlFor="statut" className="text-[13px] font-medium text-ink">
             Statut
           </label>
           <select
             id="statut"
             name="statut"
             defaultValue={status ?? ""}
-            className="rounded border border-zinc-300 bg-white px-3 py-2"
+            className="rounded-lg border border-line bg-white px-3 py-2"
           >
             <option value="">Tous les statuts</option>
             {Object.keys(ORDER_TRANSITIONS).map((value) => (
@@ -49,19 +49,19 @@ export default async function EmployeOrdersPage({
           </select>
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="client" className="text-sm font-medium">
+          <label htmlFor="client" className="text-[13px] font-medium text-ink">
             Client (nom ou email)
           </label>
           <input
             id="client"
             name="client"
             defaultValue={clientSearch ?? ""}
-            className="rounded border border-zinc-300 bg-white px-3 py-2"
+            className="rounded-lg border border-line bg-white px-3 py-2"
           />
         </div>
         <button
           type="submit"
-          className="rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800"
+          className="rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark"
         >
           Filtrer
         </button>
@@ -70,7 +70,7 @@ export default async function EmployeOrdersPage({
         </Link>
       </form>
 
-      <p className="mt-4 text-sm text-zinc-600">
+      <p className="mt-4 text-sm text-muted">
         {orders.length} commande{orders.length > 1 ? "s" : ""}
       </p>
 
@@ -78,7 +78,7 @@ export default async function EmployeOrdersPage({
         <table className="w-full border-collapse text-sm">
           <caption className="sr-only">Liste des commandes filtrées</caption>
           <thead>
-            <tr className="border-b border-zinc-300 text-left">
+            <tr className="border-b border-line text-left">
               <th scope="col" className="py-2 pr-4">
                 N°
               </th>
@@ -104,15 +104,12 @@ export default async function EmployeOrdersPage({
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr
-                key={order.id}
-                className="border-b border-zinc-200 last:border-0"
-              >
+              <tr key={order.id} className="border-b border-line last:border-0">
                 <td className="py-2 pr-4">{order.id}</td>
                 <td className="py-2 pr-4">
                   <span className="font-medium">{order.client_name}</span>
                   <br />
-                  <span className="text-zinc-500">{order.client_email}</span>
+                  <span className="text-muted">{order.client_email}</span>
                 </td>
                 <td className="py-2 pr-4">{order.menu_title}</td>
                 <td className="py-2 pr-4">
@@ -132,7 +129,7 @@ export default async function EmployeOrdersPage({
                 <td className="py-2">
                   <Link
                     href={`/employe/commandes/${order.id}`}
-                    className="text-emerald-800 underline"
+                    className="text-primary underline"
                   >
                     Gérer
                     <span className="sr-only"> la commande n° {order.id}</span>
@@ -143,7 +140,7 @@ export default async function EmployeOrdersPage({
           </tbody>
         </table>
         {orders.length === 0 && (
-          <p className="mt-4 rounded border border-dashed border-zinc-300 p-4 text-center text-zinc-600">
+          <p className="mt-4 rounded-lg border border-dashed border-line p-4 text-center text-muted">
             Aucune commande ne correspond à ces filtres.
           </p>
         )}

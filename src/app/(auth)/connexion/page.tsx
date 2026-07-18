@@ -12,11 +12,11 @@ export default async function ConnexionPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-10">
-      <h1 className="mb-6 text-2xl font-bold">Se connecter</h1>
+      <h1 className="mb-6 text-2xl">Se connecter</h1>
       <LoginForm />
       <p className="mt-4 text-sm">
         Pas encore de compte ?{" "}
-        <Link href="/inscription" className="text-emerald-800 underline">
+        <Link href="/inscription" className="text-primary underline">
           Créer un compte
         </Link>
       </p>

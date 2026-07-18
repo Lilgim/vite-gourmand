@@ -16,7 +16,7 @@ export const ModerateButtons = ({ reviewId }: ModerateButtonsProps) => {
     return (
       <p
         role="status"
-        className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+        className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
       >
         {state.message}
       </p>
@@ -36,7 +36,7 @@ export const ModerateButtons = ({ reviewId }: ModerateButtonsProps) => {
         name="decision"
         value="approved"
         disabled={pending}
-        className="rounded bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-dark disabled:opacity-60"
       >
         Valider et publier
       </button>
@@ -45,7 +45,7 @@ export const ModerateButtons = ({ reviewId }: ModerateButtonsProps) => {
         name="decision"
         value="rejected"
         disabled={pending}
-        className="rounded border border-red-300 px-3 py-1.5 text-sm font-medium text-red-800 hover:bg-red-50 disabled:opacity-60"
+        className="rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-800 hover:bg-red-50 disabled:opacity-60"
       >
         Refuser
       </button>

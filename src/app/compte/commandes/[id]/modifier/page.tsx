@@ -35,15 +35,18 @@ export default async function ModifierCommandePage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <nav aria-label="Fil d'Ariane" className="text-sm text-zinc-600">
+      <nav
+        aria-label="Fil d'Ariane"
+        className="text-xs uppercase tracking-widest text-muted"
+      >
         <Link href={`/compte/commandes/${id}`} className="hover:underline">
           Commande n° {id}
         </Link>{" "}
         / <span aria-current="page">Modifier</span>
       </nav>
 
-      <h1 className="mt-4 text-3xl font-bold">Modifier ma commande</h1>
-      <p className="mt-2 rounded bg-zinc-50 p-3 text-sm text-zinc-700">
+      <h1 className="mt-4 text-3xl">Modifier ma commande</h1>
+      <p className="mt-2 rounded-lg bg-surface p-3 text-sm text-ink">
         Le menu (<strong>{order.menu_title}</strong>) ne peut pas être changé :
         pour un autre menu, annulez cette commande puis passez-en une nouvelle.
       </p>

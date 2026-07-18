@@ -13,7 +13,7 @@ export const LoginForm = () => {
       {state.status === "error" && state.message && (
         <p
           role="alert"
-          className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
         >
           {state.message}
         </p>
@@ -37,7 +37,7 @@ export const LoginForm = () => {
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark disabled:opacity-60"
       >
         {pending ? "Connexion en cours…" : "Se connecter"}
       </button>

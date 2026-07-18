@@ -9,9 +9,9 @@ export default async function EmployeAvisPage() {
 
   return (
     <div className="mt-6">
-      <h1 className="text-2xl font-bold">Avis à modérer</h1>
+      <h1 className="text-2xl">Avis à modérer</h1>
       {reviews.length === 0 ? (
-        <p className="mt-4 rounded border border-dashed border-zinc-300 p-4 text-center text-zinc-600">
+        <p className="mt-4 rounded-lg border border-dashed border-line p-4 text-center text-muted">
           Aucun avis en attente de modération.
         </p>
       ) : (
@@ -19,17 +19,17 @@ export default async function EmployeAvisPage() {
           {reviews.map((review) => (
             <li
               key={review.id}
-              className="rounded border border-zinc-200 p-4 text-sm"
+              className="rounded-lg border border-line p-4 text-sm"
             >
-              <p aria-hidden="true" className="text-amber-500">
+              <p aria-hidden="true" className="text-primary">
                 {"★".repeat(review.rating)}
-                <span className="text-zinc-300">
+                <span className="text-line">
                   {"★".repeat(5 - review.rating)}
                 </span>
               </p>
               <p className="sr-only">Note : {review.rating} sur 5</p>
-              <p className="mt-2 text-zinc-700">{review.comment}</p>
-              <p className="mt-2 text-zinc-500">
+              <p className="mt-2 text-ink">{review.comment}</p>
+              <p className="mt-2 text-muted">
                 {review.client_name} — {review.menu_title} —{" "}
                 {new Date(review.created_at).toLocaleDateString("fr-FR")}
               </p>

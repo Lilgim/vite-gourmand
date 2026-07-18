@@ -17,8 +17,8 @@ export default async function MenusPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-3xl font-bold">Nos menus</h1>
-      <p className="mt-2 text-zinc-600">
+      <h1 className="text-3xl">Nos menus</h1>
+      <p className="mt-2 text-muted">
         Filtrez par prix, thème, régime alimentaire ou nombre de convives — la
         liste se met à jour instantanément.
       </p>
