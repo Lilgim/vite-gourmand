@@ -36,3 +36,14 @@ Learnings:
 - Biome a11y strict : pas d'aria-label sur <p> → pattern aria-hidden pour les étoiles + span sr-only pour le texte lecteur d'écran.
 - Le sujet demande de "consulter" contact → page coordonnées + horaires, pas de formulaire (scope minimal conforme).
 Files: src/app/{page,entreprise/page,contact/page,mentions-legales/page,cgv/page}.tsx, src/components/footer.tsx, src/lib/queries/home.ts, src/app/layout.tsx
+
+=== Iteration 4 (2026-07-14 22:00) ===
+Story: story-menus - Catalogue des menus avec filtres
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test — /menus rend 6 menus + filtres, /menus/1 rend plats/allergènes/galerie, /menus/999 et /menus/abc → 404, SVG servis en 200.
+Learnings:
+- PIÈGE ENCODAGE : (Get-Content -Raw) -replace | Set-Content casse l'UTF-8 d'un fichier accentué (mojibake) → toujours utiliser l'outil Edit pour modifier des fichiers existants, git checkout pour restaurer.
+- Filtres "sans rechargement" : composant client qui filtre en mémoire la liste passée par le Server Component — simple et défendable ; compteur de résultats en aria-live.
+- Visuels menus : SVG placeholders locaux dans public/images/menus/ (dépôt public → pas de photos sous licence) ; biome-ignore noImgElement pour <img> sur SVG locaux.
+- Agrégats SQL : LEFT JOIN LATERAL pour première image + array_agg DISTINCT ... FILTER pour les allergènes par menu.
+Files: src/lib/queries/menus.ts, src/app/menus/{page,menus-explorer}.tsx, src/app/menus/[id]/page.tsx, public/images/menus/*.svg, sql/02_seed.sql (.jpg→.svg)

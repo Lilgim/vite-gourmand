@@ -28,7 +28,7 @@
       "title": "Catalogue des menus avec filtres",
       "description": "Liste des menus et page détail (galerie, description, thème, plats, allergènes, régime, nb minimum de personnes, prix minimum, conditions, stock). Filtres combinables par prix, thème, régime et nombre minimum de personnes SANS rechargement complet.",
       "priority": 4,
-      "passes": false
+      "passes": true
     },
     {
       "id": "story-order",
