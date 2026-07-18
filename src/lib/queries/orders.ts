@@ -72,6 +72,26 @@ export const getOrdersForUser = (userId: number): Promise<OrderSummary[]> =>
     [userId],
   );
 
+export type OrderReview = {
+  rating: number;
+  comment: string;
+  status: "pending" | "approved" | "rejected";
+};
+
+export const REVIEW_STATUS_LABELS: Record<string, string> = {
+  pending: "En attente de validation par notre équipe",
+  approved: "Publié sur le site",
+  rejected: "Refusé par notre équipe",
+};
+
+export const getReviewForOrder = (
+  orderId: number,
+): Promise<OrderReview | null> =>
+  queryOne<OrderReview>(
+    "SELECT rating, comment, status FROM reviews WHERE order_id = $1",
+    [orderId],
+  );
+
 export type StatusHistoryEntry = {
   status: string;
   created_at: string;

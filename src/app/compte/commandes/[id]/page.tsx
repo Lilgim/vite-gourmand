@@ -5,9 +5,12 @@ import { requireUser } from "@/lib/auth";
 import {
   getOrderForUser,
   getOrderStatusHistory,
+  getReviewForOrder,
   ORDER_STATUS_LABELS,
+  REVIEW_STATUS_LABELS,
 } from "@/lib/queries/orders";
 import { CancelButton } from "./cancel-button";
+import { ReviewForm } from "./review-form";
 
 type OrderPageProps = { params: Promise<{ id: string }> };
 
@@ -32,7 +35,10 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
   const order = await getOrderForUser(id, user.id);
   if (!order) notFound();
 
-  const history = await getOrderStatusHistory(id, user.id);
+  const [history, review] = await Promise.all([
+    getOrderStatusHistory(id, user.id),
+    getReviewForOrder(id),
+  ]);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
@@ -168,6 +174,37 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
           ))}
         </ol>
       </section>
+
+      {order.current_status === "completed" && (
+        <section aria-labelledby="titre-avis" className="mt-8">
+          <h2 id="titre-avis" className="text-xl font-bold">
+            Votre avis
+          </h2>
+          {review ? (
+            <div className="mt-3 rounded border border-zinc-200 p-4 text-sm">
+              <p aria-hidden="true" className="text-amber-500">
+                {"★".repeat(review.rating)}
+                <span className="text-zinc-300">
+                  {"★".repeat(5 - review.rating)}
+                </span>
+              </p>
+              <p className="sr-only">Note : {review.rating} sur 5</p>
+              <p className="mt-2 text-zinc-700">{review.comment}</p>
+              <p className="mt-2 font-medium text-zinc-600">
+                {REVIEW_STATUS_LABELS[review.status]}
+              </p>
+            </div>
+          ) : (
+            <div className="mt-3">
+              <p className="mb-3 text-sm text-zinc-600">
+                Votre commande est terminée : partagez votre expérience ! Votre
+                avis sera relu par notre équipe avant publication.
+              </p>
+              <ReviewForm orderId={order.id} />
+            </div>
+          )}
+        </section>
+      )}
     </div>
   );
 }

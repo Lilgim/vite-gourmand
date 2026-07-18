@@ -25,6 +25,19 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Le mot de passe est obligatoire"),
 });
 
+export const reviewSchema = z.object({
+  rating: z.coerce
+    .number("Note invalide")
+    .int("Note invalide")
+    .min(1, "La note va de 1 à 5")
+    .max(5, "La note va de 1 à 5"),
+  comment: z
+    .string()
+    .trim()
+    .min(10, "Votre avis doit contenir au moins 10 caractères")
+    .max(1000, "Votre avis ne peut pas dépasser 1000 caractères"),
+});
+
 export const profileSchema = z.object({
   first_name: z.string().trim().min(1, "Le prénom est obligatoire").max(100),
   last_name: z.string().trim().min(1, "Le nom est obligatoire").max(100),
