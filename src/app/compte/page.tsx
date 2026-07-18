@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { getOrdersForUser, ORDER_STATUS_LABELS } from "@/lib/queries/orders";
+import { ORDER_STATUS_LABELS } from "@/lib/labels";
+import { getOrdersForUser } from "@/lib/queries/orders";
 import { ProfileForm } from "./profile-form";
 
 export const metadata: Metadata = { title: "Mon compte" };

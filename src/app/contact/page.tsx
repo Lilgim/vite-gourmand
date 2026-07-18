@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { DAY_NAMES, formatTime, getOpeningHours } from "@/lib/queries/home";
+import { DAY_NAMES, formatTime } from "@/lib/labels";
+import { getOpeningHours } from "@/lib/queries/home";
 
 export const metadata: Metadata = {
   title: "Contact",

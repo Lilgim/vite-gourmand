@@ -1,10 +1,6 @@
 import Link from "next/link";
-import {
-  DAY_NAMES,
-  formatTime,
-  getApprovedReviews,
-  getOpeningHours,
-} from "@/lib/queries/home";
+import { DAY_NAMES, formatTime } from "@/lib/labels";
+import { getApprovedReviews, getOpeningHours } from "@/lib/queries/home";
 
 export default async function HomePage() {
   const [reviews, hours] = await Promise.all([

@@ -25,6 +25,60 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Le mot de passe est obligatoire"),
 });
 
+export const menuSchema = z.object({
+  title: z.string().trim().min(1, "Le titre est obligatoire").max(150),
+  description: z.string().trim().min(1, "La description est obligatoire"),
+  theme_id: z.coerce.number("Thème invalide").int().positive("Thème invalide"),
+  diet_id: z.coerce.number("Régime invalide").int().positive("Régime invalide"),
+  min_people: z.coerce
+    .number("Minimum de personnes invalide")
+    .int()
+    .min(1, "Le minimum de personnes doit être d'au moins 1"),
+  price_per_person: z.coerce
+    .number("Prix invalide")
+    .min(0, "Le prix ne peut pas être négatif"),
+  conditions: z.string().trim().max(2000).optional().or(z.literal("")),
+  stock: z.coerce
+    .number("Stock invalide")
+    .int()
+    .min(0, "Le stock ne peut pas être négatif"),
+  dish_ids: z
+    .array(z.coerce.number().int().positive())
+    .min(1, "Sélectionnez au moins un plat"),
+  images: z.string().max(4000).optional().or(z.literal("")),
+});
+
+export const dishSchema = z.object({
+  name: z.string().trim().min(1, "Le nom est obligatoire").max(150),
+  description: z.string().trim().max(500).optional().or(z.literal("")),
+  allergen_ids: z.array(z.coerce.number().int().positive()),
+});
+
+const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+export const openingHoursSchema = z.object({
+  days: z.array(
+    z
+      .object({
+        day: z.number().int().min(0).max(6),
+        is_closed: z.boolean(),
+        open_time: z.string(),
+        close_time: z.string(),
+      })
+      .refine(
+        (entry) =>
+          entry.is_closed ||
+          (timePattern.test(entry.open_time) &&
+            timePattern.test(entry.close_time) &&
+            entry.open_time < entry.close_time),
+        {
+          message:
+            "Pour un jour ouvert, indiquez une ouverture antérieure à la fermeture (HH:MM)",
+        },
+      ),
+  ),
+});
+
 export const reviewSchema = z.object({
   rating: z.coerce
     .number("Note invalide")

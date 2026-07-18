@@ -28,23 +28,9 @@ export type OpeningHour = {
   is_closed: boolean;
 };
 
-export const DAY_NAMES = [
-  "Lundi",
-  "Mardi",
-  "Mercredi",
-  "Jeudi",
-  "Vendredi",
-  "Samedi",
-  "Dimanche",
-] as const;
-
 export const getOpeningHours = (): Promise<OpeningHour[]> =>
   query<OpeningHour>(
     `SELECT day_of_week, open_time::text, close_time::text, is_closed
        FROM opening_hours
       ORDER BY day_of_week`,
   );
-
-// "09:00:00" -> "09:00"
-export const formatTime = (time: string | null): string =>
-  time ? time.slice(0, 5).replace(":", "h") : "";

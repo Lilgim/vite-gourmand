@@ -82,3 +82,14 @@ Learnings:
 - Radios de notation stylées : input sr-only + label cliquable — accessible sans lib externe.
 - La modération (validation/refus employé) est portée par story-employee ; l'affichage public des seuls avis "approved" est déjà en place depuis story-public-pages.
 Files: src/app/actions/reviews.ts, src/app/compte/commandes/[id]/review-form.tsx, src/lib/queries/orders.ts, src/lib/validation.ts, src/app/compte/commandes/[id]/page.tsx
+
+=== Iteration 8 (2026-07-15 00:45) ===
+Story: story-employee - Espace employé
+Status: PASSED
+Validations réelles : lint/typecheck/build OK ; smoke test session employé — liste des commandes avec infos client, filtre par statut (completed → seule la commande 1 dans le tableau) et par client (camille), transitions proposées sur commande submitted (Acceptée/Annulée), pages menus/plats/horaires/avis en 200 ; session client sur /employe → redirigée par requireRole.
+Learnings:
+- PIÈGE Next : un composant client qui importe une constante d'un module "server-only" (qui tire pg) casse le build → module neutre src/lib/labels.ts pour les libellés partagés serveur/client.
+- Machine à états pure (src/lib/status.ts) : ORDER_TRANSITIONS + canTransition — transitions interdites refusées côté serveur, testable unitairement.
+- Faux positif de test : compter les occurrences d'un texte dans le HTML Next compte aussi le payload RSC sérialisé → vérifier le contenu métier (titres de menus), pas les libellés d'action.
+- Layout serveur comme garde de rôle : requireRole dans employe/layout.tsx protège toutes les sous-routes.
+Files: src/lib/{status,labels}.ts, src/app/actions/employee.ts, src/lib/queries/employee.ts, src/app/employe/** (layout, commandes, menus, plats, horaires, avis), src/lib/validation.ts (menuSchema, dishSchema, openingHoursSchema)

@@ -1,17 +1,6 @@
 import "server-only";
 import { query, queryOne } from "@/lib/db";
 
-export const ORDER_STATUS_LABELS: Record<string, string> = {
-  submitted: "Soumise — en attente d'acceptation",
-  accepted: "Acceptée",
-  in_preparation: "En préparation",
-  in_delivery: "En cours de livraison",
-  delivered: "Livrée",
-  awaiting_equipment_return: "En attente du retour de matériel",
-  completed: "Terminée",
-  cancelled: "Annulée",
-};
-
 export type OrderDetail = {
   id: number;
   user_id: number;
@@ -76,12 +65,6 @@ export type OrderReview = {
   rating: number;
   comment: string;
   status: "pending" | "approved" | "rejected";
-};
-
-export const REVIEW_STATUS_LABELS: Record<string, string> = {
-  pending: "En attente de validation par notre équipe",
-  approved: "Publié sur le site",
-  rejected: "Refusé par notre équipe",
 };
 
 export const getReviewForOrder = (
