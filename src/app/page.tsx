@@ -13,6 +13,7 @@ export default async function HomePage() {
     getActiveMenus(),
   ]);
   const featuredMenus = menus.slice(0, 3);
+  const visibleReviews = reviews.slice(0, 3);
 
   return (
     <div className="overflow-hidden">
@@ -256,32 +257,41 @@ export default async function HomePage() {
               Aucun avis publié pour le moment.
             </p>
           ) : (
-            <ul className="mt-12 grid gap-5 lg:grid-cols-3">
-              {reviews.slice(0, 3).map((review, index) => (
-                <li
-                  key={review.id}
-                  className={`rounded-[1.25rem] border border-primary/10 p-7 ${index === 1 ? "bg-primary text-white shadow-xl" : "bg-surface/70"}`}
-                >
-                  <p
-                    className={index === 1 ? "text-[#d1ba68]" : "text-primary"}
+            <ul
+              className={`mt-12 grid gap-5 ${visibleReviews.length === 1 ? "mx-auto max-w-2xl" : visibleReviews.length === 2 ? "mx-auto max-w-4xl md:grid-cols-2" : "lg:grid-cols-3"}`}
+            >
+              {visibleReviews.map((review, index) => {
+                const highlighted = visibleReviews.length === 1 || index === 1;
+                return (
+                  <li
+                    key={review.id}
+                    className={`rounded-[1.25rem] border border-primary/10 p-7 ${highlighted ? "bg-primary text-white shadow-xl" : "bg-surface/70"}`}
                   >
-                    <span aria-hidden="true">{"★".repeat(review.rating)}</span>
-                    <span className="sr-only">
-                      Note : {review.rating} sur 5
-                    </span>
-                  </p>
-                  <blockquote
-                    className={`mt-5 font-display text-xl italic leading-8 ${index === 1 ? "text-white" : "text-ink"}`}
-                  >
-                    « {review.comment} »
-                  </blockquote>
-                  <p
-                    className={`mt-6 text-xs font-semibold uppercase tracking-[0.16em] ${index === 1 ? "text-white/60" : "text-muted"}`}
-                  >
-                    {review.first_name}
-                  </p>
-                </li>
-              ))}
+                    <p
+                      className={
+                        highlighted ? "text-[#d1ba68]" : "text-primary"
+                      }
+                    >
+                      <span aria-hidden="true">
+                        {"★".repeat(review.rating)}
+                      </span>
+                      <span className="sr-only">
+                        Note : {review.rating} sur 5
+                      </span>
+                    </p>
+                    <blockquote
+                      className={`mt-5 font-display text-xl italic leading-8 ${highlighted ? "text-white" : "text-ink"}`}
+                    >
+                      « {review.comment} »
+                    </blockquote>
+                    <p
+                      className={`mt-6 text-xs font-semibold uppercase tracking-[0.16em] ${highlighted ? "text-white/60" : "text-muted"}`}
+                    >
+                      {review.first_name}
+                    </p>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
