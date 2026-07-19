@@ -9,3 +9,10 @@
 - Le sélecteur Playwright d'une statistique doit viser la cellule visible par rôle, car `getByText(...).first()` peut choisir une option cachée d'un `select`.
 - Validation finale : 21 tests unitaires / 70 assertions, lint, TypeScript et build verts ; 9 parcours E2E verts contre la production.
 - Fichiers principaux ajoutés ou modifiés : `docker-compose.vps.yml`, `playwright.config.ts`, `e2e/parcours.spec.ts`, `README.md`, `docs/*`, `.agent-forge/*`.
+
+## 2026-07-20 — Refonte de la landing
+
+- L'accueil initial manquait de hiérarchie et ne montrait aucun produit. La refonte adopte une direction éditoriale bordelaise : hero asymétrique, menus vedettes, engagements, avis et CTA final avec horaires.
+- Les visuels SVG existants sont réutilisés pour éviter une dépendance réseau et conserver la cohérence avec la charte livrée.
+- Le header public expose désormais directement les liens obligatoires vers les menus, la maison, le contact et la connexion.
+- Les animations d'entrée respectent `prefers-reduced-motion`.
