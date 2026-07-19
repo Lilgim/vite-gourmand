@@ -12,7 +12,9 @@ services:
       DATABASE_URL: postgresql://vg:${POSTGRES_PASSWORD}@postgres:5432/vite_gourmand
       MONGODB_URI: mongodb://mongo:27017/vite_gourmand_stats
       AUTH_SECRET: ${AUTH_SECRET}
+      APP_URL: https://${DOMAIN}
       EMAIL_FROM: ${EMAIL_FROM:-no-reply@vite-gourmand.example}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-contact@vite-gourmand.example}
       # SMTP_* volontairement absents : mode test documenté (emails -> logs)
     ports:
       # Loopback uniquement : debug local et cas "proxy existant"

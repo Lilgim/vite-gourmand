@@ -79,3 +79,12 @@ de prix, suivi horodaté, modération d'avis et statistiques NoSQL.
    contraintes CHECK manquantes, aria-describedby dupliqué, double requête DB.
 3. Sur Windows/PowerShell : jamais de `-replace | Set-Content` sur un fichier accentué
    (mojibake), jamais de header `Cookie` via `-Headers` (silencieusement ignoré).
+# Session de livraison finale — 19/07/2026
+
+- Audit direct des 12 pages du sujet : plusieurs exigences étaient absentes malgré les stories marquées passées (contact, mot de passe oublié, emails, adresse à l'inscription, filtres complets).
+- Le build dépendait de Google Fonts : suppression du téléchargement de build et fallbacks CSS reproductibles.
+- Ajout des parcours publics manquants avec validation Zod et réponse générique anti-énumération ; jeton de récupération signé HMAC et expirant.
+- Livrables générés dans `docs/` : manuel et charte PDF contrôlés visuellement, documentation technique/projet, veille et source traduite.
+- Board public créé sous forme d'issue GitHub à checklist : issue 15.
+- Copie officielle recréée en DOCX hors dépôt public ; trois données restent humaines : date de naissance, URL prod et dépôt Studi.
+- Validation finale : lint/tsc/build/21 tests verts ; E2E bloqué par le service Docker Desktop Windows, ne jamais le déclarer exécuté.

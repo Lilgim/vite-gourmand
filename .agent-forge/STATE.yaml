@@ -1,5 +1,5 @@
 projet: vite-gourmand
-phase: livraison — code mergé sur main, design + déploiement en cours
+phase: livraison — correctifs finaux et documents terminés, déploiement en attente
 statut: EN_COURS
 deadline_ecf: 2026-07-23T23:59:00+02:00
 depot_github: https://github.com/Lilgim/vite-gourmand
@@ -22,8 +22,14 @@ fait:
   - PR 1→11 mergées dans dev, PR 12 dev→main mergée (2026-07-18, vérifs lint/typecheck/test/build vertes)
   - infra de déploiement (Dockerfile multistage, docker-compose.prod.yml isolé, Caddy TLS) — PR 13, validée par run local (stack healthy, seed, smoke test HTTP 200/CSP)
   - passe design charte « Crème & Bordeaux » appliquée à tout le front — PR 14 (Paper : 3 maquettes desktop + 3 mobiles ; lint/tsc/test/build/e2e verts, audit visuel réel)
+  - audit final du sujet : inscription complète, mot de passe oublié, contact, emails obligatoires, filtres prix/menu et build hors ligne
+  - livrables : manuel PDF, charte PDF, documentation technique/projet, source anglophone, veille, matrice et copie DOCX préparés
+  - board public : https://github.com/Lilgim/vite-gourmand/issues/15
 actions_humaines_requises:
-  - configurer le DNS du sous-domaine vers le VPS Alfred + fournir le domaine (bloque le déploiement HTTPS)
+  - fournir/configurer le domaine et l'accès VPS puis valider le déploiement HTTPS
+  - compléter la date de naissance et le lien de production dans la copie officielle
+  - démarrer Docker Desktop et rejouer les E2E après les correctifs finaux
 prochaines_etapes:
   - déploiement VPS Alfred (git clone + .env + compose up) une fois le DNS prêt, puis validation prod des 4 rôles
-  - story-delivery : charte graphique PDF (réutiliser les 6 maquettes Paper), manuel utilisateur PDF, doc technique (MCD, cas d'utilisation, séquence), board de gestion de projet public, source anglophone, veille sécurité, matrice d'exigences, copie officielle
+  - rejouer les 9 parcours E2E, déployer sur le VPS et valider les 4 rôles en production
+  - fusionner vers main après validation, compléter la copie et déposer sur Studi

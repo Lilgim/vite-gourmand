@@ -7,8 +7,8 @@ Projet réalisé dans le cadre du Titre Professionnel Développeur Web et Web Mo
 ## Liens essentiels
 
 - Application déployée : _à venir_
-- Outil de gestion de projet : _à venir_
-- Identifiants de démonstration : voir le manuel utilisateur (_à venir_)
+- Outil de gestion de projet : https://github.com/Lilgim/vite-gourmand/issues/15
+- Identifiants de démonstration : voir `docs/MANUEL_UTILISATEUR.pdf`
 
 ## Stack technique
 
@@ -127,5 +127,5 @@ Mise à jour : `git pull && docker compose -f docker-compose.prod.yml up -d --bu
 
 ## Documentation
 
-- `docs/` : documentation technique, gestion de projet, charte graphique et manuel utilisateur (à venir) ;
+- `docs/` : documentation technique, gestion de projet, charte graphique, manuel utilisateur, veille sécurité et source anglophone traduite ;
 - `.agent-forge/` : journal des décisions, exigences et vérifications du projet.

@@ -6,7 +6,12 @@ export const registerSchema = z.object({
     .string()
     .min(10, "Le mot de passe doit contenir au moins 10 caractères")
     .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule")
-    .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre"),
+    .regex(/[a-z]/, "Le mot de passe doit contenir au moins une minuscule")
+    .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre")
+    .regex(
+      /[^A-Za-z0-9]/,
+      "Le mot de passe doit contenir au moins un caractère spécial",
+    ),
   first_name: z.string().trim().min(1, "Le prénom est obligatoire").max(100),
   last_name: z.string().trim().min(1, "Le nom est obligatoire").max(100),
   phone: z
@@ -15,9 +20,42 @@ export const registerSchema = z.object({
     .regex(
       /^(\+33|0)[1-9]\d{8}$/,
       "Numéro de téléphone invalide (format français)",
-    )
-    .optional()
-    .or(z.literal("")),
+    ),
+  address: z.string().trim().min(1, "L'adresse est obligatoire").max(255),
+  postal_code: z
+    .string()
+    .trim()
+    .regex(/^\d{5}$/, "Code postal invalide (5 chiffres)"),
+  city: z.string().trim().min(1, "La ville est obligatoire").max(100),
+});
+
+export const passwordSchema = registerSchema.shape.password;
+
+export const employeeAccountSchema = registerSchema
+  .omit({ address: true, postal_code: true, city: true })
+  .extend({ phone: registerSchema.shape.phone.optional().or(z.literal("")) });
+
+export const emailSchema = z.object({
+  email: z.email("Adresse email invalide").max(255),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Lien de réinitialisation invalide"),
+  password: passwordSchema,
+});
+
+export const contactSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(3, "Le titre doit contenir au moins 3 caractères")
+    .max(150),
+  description: z
+    .string()
+    .trim()
+    .min(10, "La description doit contenir au moins 10 caractères")
+    .max(3000),
+  email: z.email("Adresse email invalide").max(255),
 });
 
 export const loginSchema = z.object({

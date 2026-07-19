@@ -42,11 +42,33 @@ export const RegisterForm = () => {
         errors={errors?.email}
       />
       <FormField
-        label="Téléphone (facultatif)"
+        label="Téléphone"
         name="phone"
         type="tel"
+        required
         autoComplete="tel"
         errors={errors?.phone}
+      />
+      <FormField
+        label="Adresse postale"
+        name="address"
+        required
+        autoComplete="street-address"
+        errors={errors?.address}
+      />
+      <FormField
+        label="Code postal"
+        name="postal_code"
+        required
+        autoComplete="postal-code"
+        errors={errors?.postal_code}
+      />
+      <FormField
+        label="Ville"
+        name="city"
+        required
+        autoComplete="address-level2"
+        errors={errors?.city}
       />
       <FormField
         label="Mot de passe"
@@ -54,7 +76,7 @@ export const RegisterForm = () => {
         type="password"
         required
         autoComplete="new-password"
-        hint="Au moins 10 caractères, une majuscule et un chiffre."
+        hint="Au moins 10 caractères, avec majuscule, minuscule, chiffre et caractère spécial."
         errors={errors?.password}
       />
       <button

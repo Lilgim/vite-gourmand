@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DAY_NAMES, formatTime } from "@/lib/labels";
 import { getOpeningHours } from "@/lib/queries/home";
+import { ContactForm } from "./contact-form";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -80,6 +81,12 @@ export default async function ContactPage() {
           </table>
         </section>
       </div>
+      <section aria-labelledby="titre-formulaire-contact" className="mt-10">
+        <h2 id="titre-formulaire-contact" className="text-xl">
+          Envoyer une demande
+        </h2>
+        <ContactForm />
+      </section>
     </div>
   );
 }

@@ -14,6 +14,11 @@ export default async function ConnexionPage() {
     <div className="mx-auto max-w-md px-4 py-10">
       <h1 className="mb-6 text-2xl">Se connecter</h1>
       <LoginForm />
+      <p className="mt-3 text-sm">
+        <Link href="/mot-de-passe-oublie" className="text-primary underline">
+          Mot de passe oublié ?
+        </Link>
+      </p>
       <p className="mt-4 text-sm">
         Pas encore de compte ?{" "}
         <Link href="/inscription" className="text-primary underline">

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { getMenuStats } from "@/lib/queries/admin";
+import { getAdminMenuOptions, getMenuStats } from "@/lib/queries/admin";
 
 export const metadata: Metadata = { title: "Statistiques" };
 
 type AdminPageProps = {
-  searchParams: Promise<{ du?: string; au?: string }>;
+  searchParams: Promise<{ du?: string; au?: string; menu?: string }>;
 };
 
 const parseDate = (value?: string): Date | undefined => {
@@ -24,8 +24,14 @@ export default async function AdminStatsPage({ searchParams }: AdminPageProps) {
   const to = toDay
     ? new Date(toDay.getTime() + 24 * 60 * 60 * 1000 - 1)
     : undefined;
+  const menuId = Number(params.menu);
+  const selectedMenuId =
+    Number.isInteger(menuId) && menuId > 0 ? menuId : undefined;
 
-  const stats = await getMenuStats(from, to);
+  const [stats, menus] = await Promise.all([
+    getMenuStats(from, to, selectedMenuId),
+    getAdminMenuOptions(),
+  ]);
   const totalOrders = stats.reduce((sum, stat) => sum + stat.orders, 0);
   const totalRevenue =
     Math.round(stats.reduce((sum, stat) => sum + stat.revenue, 0) * 100) / 100;
@@ -42,6 +48,24 @@ export default async function AdminStatsPage({ searchParams }: AdminPageProps) {
         method="get"
         className="mt-4 flex flex-wrap items-end gap-4 rounded-lg border border-line bg-surface p-4"
       >
+        <div className="flex flex-col gap-1">
+          <label htmlFor="menu" className="text-[13px] font-medium text-ink">
+            Menu
+          </label>
+          <select
+            id="menu"
+            name="menu"
+            defaultValue={params.menu ?? ""}
+            className="rounded-lg border border-line bg-white px-3 py-2"
+          >
+            <option value="">Tous les menus</option>
+            {menus.map((menu) => (
+              <option key={menu.id} value={menu.id}>
+                {menu.title}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="du" className="text-[13px] font-medium text-ink">
             Du

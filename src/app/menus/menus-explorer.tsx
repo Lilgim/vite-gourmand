@@ -13,6 +13,7 @@ type MenusExplorerProps = {
 // Filtres combinables appliqués côté client : aucune navigation ni
 // rechargement de page (exigence du sujet).
 export const MenusExplorer = ({ menus, themes, diets }: MenusExplorerProps) => {
+  const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [theme, setTheme] = useState("");
   const [diet, setDiet] = useState("");
@@ -21,6 +22,9 @@ export const MenusExplorer = ({ menus, themes, diets }: MenusExplorerProps) => {
   const filtered = useMemo(
     () =>
       menus.filter((menu) => {
+        if (minPrice && Number(menu.price_per_person) < Number(minPrice)) {
+          return false;
+        }
         if (maxPrice && Number(menu.price_per_person) > Number(maxPrice)) {
           return false;
         }
@@ -29,16 +33,33 @@ export const MenusExplorer = ({ menus, themes, diets }: MenusExplorerProps) => {
         if (people && Number(menu.min_people) > Number(people)) return false;
         return true;
       }),
-    [menus, maxPrice, theme, diet, people],
+    [menus, minPrice, maxPrice, theme, diet, people],
   );
 
   return (
     <>
       <form
         aria-label="Filtres des menus"
-        className="mt-6 grid gap-4 rounded-[10px] border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-6 grid gap-4 rounded-[10px] border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-3"
         onSubmit={(event) => event.preventDefault()}
       >
+        <div className="flex flex-col gap-1">
+          <label
+            htmlFor="filtre-prix-min"
+            className="text-xs font-medium uppercase tracking-wider text-muted"
+          >
+            Prix minimum par personne (€)
+          </label>
+          <input
+            id="filtre-prix-min"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            value={minPrice}
+            onChange={(event) => setMinPrice(event.target.value)}
+            className="rounded-lg border border-line bg-white px-3 py-2 focus:outline-2 focus:outline-primary"
+          />
+        </div>
         <div className="flex flex-col gap-1">
           <label
             htmlFor="filtre-prix"

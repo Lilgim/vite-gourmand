@@ -48,3 +48,20 @@ DA validée dans Paper (fichier « Vite & Gourmand — charte & maquettes » : 3
 | Build production | `bun run build` | ✔ 24 routes |
 | Parcours e2e (4 rôles + responsive) | `bun run test:e2e` | ✔ `9 passed (13.0s)` — textes/labels/rôles ARIA inchangés |
 | Audit visuel du front restylé | captures Playwright réelles (accueil, menus, commande, suivi horodaté, stats admin, mobile) | ✔ DA fidèle : eyebrow bronze, titres Playfair, boutons/étoiles/prix bordeaux, footer profond, visuels menus en aplats pastel |
+
+## 2026-07-19 — Audit final et complétude du sujet
+
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| Compte GitHub actif | `gh api user --jq .login` | `Lilgim` ✔ |
+| Board public | `gh issue create ...` | ✔ https://github.com/Lilgim/vite-gourmand/issues/15 |
+| Lint / format | `bun run lint:fix` | ✔ 78 fichiers, aucune correction restante |
+| TypeScript | `bun run typecheck` | ✔ aucune erreur |
+| Tests unitaires | `bun test tests/` | ✔ 21 tests, 70 assertions, 0 échec |
+| Build production hors ligne | `bun run build` | ✔ compilation, TypeScript et 26 routes ; aucun téléchargement Google Fonts |
+| Configuration Compose prod | `docker compose -f docker-compose.prod.yml --env-file .env.production.example config --quiet` | ✔ configuration valide |
+| Manuel utilisateur PDF | génération ReportLab + lecture pypdf + rendu PyMuPDF | ✔ 5 pages, contrôle visuel sans débordement |
+| Charte graphique PDF | génération ReportLab + lecture pypdf + rendu PyMuPDF | ✔ 7 pages, palette + 3 desktop + 3 mobiles |
+| Copie officielle DOCX | génération python-docx + ouverture python-docx + contrôle ZIP | ✔ fichier structurellement valide ; rendu LibreOffice NON EXÉCUTÉ (LibreOffice/Word absents) |
+| Parcours E2E après correctifs | `bun run test:e2e` | NON EXÉCUTÉ — service Docker Desktop Windows impossible à démarrer, PostgreSQL/MongoDB indisponibles. Dernier run complet avant correctifs : 9/9 le 18/07. |
+| Déploiement HTTPS | SSH/DNS | NON EXÉCUTÉ — aucun domaine réel ni accès VPS/alias SSH disponible dans l'environnement. |
