@@ -137,7 +137,7 @@ Biome vérifie le formatage et les règles d'accessibilité. TypeScript est exé
 
 ## 11. Déploiement
 
-Créer le DNS A du sous-domaine vers le VPS, ouvrir 80/443, cloner le dépôt et copier `.env.production.example` vers `.env`. Générer `POSTGRES_PASSWORD` et `AUTH_SECRET`, renseigner `DOMAIN`, `APP_URL`, `ACME_EMAIL` et les emails. Lancer `docker compose -f docker-compose.prod.yml up -d --build`, puis initialiser la démonstration avec `docker compose -f docker-compose.prod.yml exec app node scripts/reset-db.ts`. Contrôler `docker compose ... ps` et la réponse HTTPS.
+Le déploiement validé est accessible sur https://vite-gourmand.lilgim.cloud. Le DNS A pointe vers le VPS. L'application, PostgreSQL et MongoDB tournent dans la stack isolée `docker-compose.vps.yml` ; les deux bases n'exposent aucun port public. L'application rejoint aussi le réseau du Caddy central, qui termine le TLS et renouvelle le certificat. Les secrets sont générés directement dans `/srv/vite-gourmand/.env`. Le démarrage utilise `docker compose --env-file .env -f docker-compose.vps.yml up -d --build`, puis l'initialisation `docker compose --env-file .env -f docker-compose.vps.yml exec -T app node scripts/reset-db.ts`. Le 20 juillet 2026, les trois services étaient sains, la page publique répondait en HTTPS 200 avec CSP, et les neuf parcours Playwright distants étaient verts.
 
 ## 12. Limites et améliorations
 

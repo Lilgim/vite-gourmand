@@ -221,7 +221,10 @@ test.describe.serial("parcours ECF complet", () => {
     ).toBeVisible();
     // La nouvelle commande apparaît dans les stats du menu Anniversaire
     await expect(
-      page.getByText("Menu Anniversaire Gourmand").first(),
+      page.getByRole("cell", {
+        name: "Menu Anniversaire Gourmand",
+        exact: true,
+      }),
     ).toBeVisible();
 
     // Création d'un compte employé

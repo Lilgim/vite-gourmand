@@ -1,6 +1,6 @@
 projet: vite-gourmand
-phase: livraison — correctifs finaux et documents terminés, déploiement en attente
-statut: EN_COURS
+phase: livraison — application et documents validés, publication Git restante
+statut: PRET_A_PUBLIER
 deadline_ecf: 2026-07-23T23:59:00+02:00
 depot_github: https://github.com/Lilgim/vite-gourmand
 branches:
@@ -17,7 +17,7 @@ fait:
   - avis 1-5 après commande terminée + modération employé
   - espace employé (commandes filtrables, machine à états, CRUD menus/plats/horaires)
   - espace admin (comptes employés, stats MongoDB filtrables avec graphique)
-  - 16 tests unitaires + 9 parcours e2e Playwright (4 rôles + responsive)
+  - 21 tests unitaires + 9 parcours e2e Playwright (4 rôles + responsive)
   - story-hardening (headers sécurité, emails transactionnels mode test, passe RGAA)
   - PR 1→11 mergées dans dev, PR 12 dev→main mergée (2026-07-18, vérifs lint/typecheck/test/build vertes)
   - infra de déploiement (Dockerfile multistage, docker-compose.prod.yml isolé, Caddy TLS) — PR 13, validée par run local (stack healthy, seed, smoke test HTTP 200/CSP)
@@ -25,11 +25,12 @@ fait:
   - audit final du sujet : inscription complète, mot de passe oublié, contact, emails obligatoires, filtres prix/menu et build hors ligne
   - livrables : manuel PDF, charte PDF, documentation technique/projet, source anglophone, veille, matrice et copie DOCX préparés
   - board public : https://github.com/Lilgim/vite-gourmand/issues/15
+  - déploiement HTTPS validé : https://vite-gourmand.lilgim.cloud (DNS, certificat, CSP, services sains)
+  - 9 parcours Playwright rejoués avec succès contre l'URL publique le 2026-07-20
+  - copie officielle complétée avec date de naissance, URL de production, board et identifiants
 actions_humaines_requises:
-  - fournir/configurer le domaine et l'accès VPS puis valider le déploiement HTTPS
-  - compléter la date de naissance et le lien de production dans la copie officielle
-  - démarrer Docker Desktop et rejouer les E2E après les correctifs finaux
+  - pousser la branche feature/delivery-final, ouvrir puis fusionner la PR vers main
+  - déposer manuellement la copie finale sur Studi avant le 23 juillet 2026 à 23 h 59
 prochaines_etapes:
-  - déploiement VPS Alfred (git clone + .env + compose up) une fois le DNS prêt, puis validation prod des 4 rôles
-  - rejouer les 9 parcours E2E, déployer sur le VPS et valider les 4 rôles en production
-  - fusionner vers main après validation, compléter la copie et déposer sur Studi
+  - publier la branche validée sur GitHub puis fusionner vers main après accord de Lucas
+  - déposer le DOCX final sur Studi

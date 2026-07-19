@@ -42,9 +42,9 @@ La définition de fini d'une story comprend validation serveur, contrôle des r�
 - concurrence sur le stock : transaction et mise à jour conditionnelle ;
 - sécurité : autorisation serveur, sessions révocables, requêtes paramétrées ;
 - double base : PostgreSQL source et resynchronisation MongoDB disponible ;
-- hébergement : image autonome et stack locale testable avant accès au VPS ;
+- hébergement : image autonome, stack locale testée puis déploiement VPS isolé derrière le proxy HTTPS central ;
 - délai : solution full-stack et dépendances limitées.
 
 ## Bilan
 
-Le découpage vertical a permis d'obtenir rapidement un parcours démontrable, puis de le durcir. Les contrôles automatisés et le journal de preuves réduisent le risque de régression. Le déploiement public demeure conditionné à la configuration DNS et au VPS, action distincte du développement.
+Le découpage vertical a permis d'obtenir rapidement un parcours démontrable, puis de le durcir. Les contrôles automatisés et le journal de preuves réduisent le risque de régression. Le déploiement public a ensuite été validé sur le VPS avec DNS, certificat HTTPS, conteneurs sains et neuf parcours Playwright exécutés contre l'URL publique.

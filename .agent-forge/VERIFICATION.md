@@ -65,3 +65,14 @@ DA validée dans Paper (fichier « Vite & Gourmand — charte & maquettes » : 3
 | Copie officielle DOCX | génération python-docx + ouverture python-docx + contrôle ZIP | ✔ fichier structurellement valide ; rendu LibreOffice NON EXÉCUTÉ (LibreOffice/Word absents) |
 | Parcours E2E après correctifs | `bun run test:e2e` | NON EXÉCUTÉ — service Docker Desktop Windows impossible à démarrer, PostgreSQL/MongoDB indisponibles. Dernier run complet avant correctifs : 9/9 le 18/07. |
 | Déploiement HTTPS | SSH/DNS | NON EXÉCUTÉ — aucun domaine réel ni accès VPS/alias SSH disponible dans l'environnement. |
+
+## 2026-07-20 — Validation de production
+
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| DNS public | `Resolve-DnsName vite-gourmand.lilgim.cloud -Type A` | ✔ `187.77.67.2` |
+| Build VPS | `docker compose --env-file .env -f docker-compose.vps.yml up -d --build` | ✔ image Next.js standalone construite, 26 routes |
+| Bases de production | `docker compose ... exec -T app node scripts/reset-db.ts` | ✔ schéma, seed et 2 statistiques MongoDB |
+| Santé des services | `docker compose ... ps` | ✔ application, PostgreSQL et MongoDB `healthy` |
+| HTTPS public | `curl -I https://vite-gourmand.lilgim.cloud/` | ✔ HTTP 200, TLS valide, CSP et en-têtes de sécurité |
+| Parcours E2E publics | `PLAYWRIGHT_BASE_URL=https://vite-gourmand.lilgim.cloud npx playwright test` | ✔ `9 passed (25.6s)` — quatre rôles, sécurité et responsive |

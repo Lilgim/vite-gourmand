@@ -1,6 +1,6 @@
 # Matrice des exigences
 
-Statuts : `FAIT` · `A_VALIDER_PROD` · `ACTION_HUMAINE`
+Statuts : `FAIT` · `ACTION_HUMAINE`
 
 | ID | Exigence | Statut | Preuves |
 |---|---|---|---|
@@ -40,7 +40,7 @@ Statuts : `FAIT` · `A_VALIDER_PROD` · `ACTION_HUMAINE`
 | R-034 | Documentation technique, MCD, cas d'utilisation, séquence | FAIT | `docs/DOCUMENTATION_TECHNIQUE.md` |
 | R-035 | Documentation de déploiement | FAIT | documentation technique, README, Compose/Caddy |
 | R-036 | Source anglophone traduite et veille sécurité | FAIT | `docs/SOURCE_ANGLOPHONE_TRADUITE.md`, `docs/VEILLE_SECURITE.md` |
-| R-037 | Application déployée et HTTPS | A_VALIDER_PROD | stack locale validée ; DNS/VPS requis |
+| R-037 | Application déployée et HTTPS | FAIT | https://vite-gourmand.lilgim.cloud ; HTTP 200, certificat valide, conteneurs sains, E2E 9/9 |
 | R-038 | Lien public outil de gestion | FAIT | https://github.com/Lilgim/vite-gourmand/issues/15 |
-| R-039 | Copie officielle complétée et renommée | ACTION_HUMAINE | fichier préparé ; date de naissance et lien de production à insérer |
+| R-039 | Copie officielle complétée et renommée | FAIT | date de naissance, URL de production, board et identifiants insérés dans le DOCX final |
 | R-040 | Dépôt final Studi avant échéance | ACTION_HUMAINE | Lucas Gimenez uniquement |

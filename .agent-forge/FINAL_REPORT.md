@@ -8,12 +8,13 @@ Les parcours visiteur, client, employé et administrateur sont implémentés. Le
 
 Le dépôt contient les scripts SQL, le README, la documentation technique, la gestion de projet, la source anglophone traduite, la veille sécurité, le manuel utilisateur PDF et la charte graphique PDF. La copie officielle locale est préparée séparément car elle ne doit pas être publiée dans le dépôt.
 
+## Validation finale
+
+L'application est déployée sur https://vite-gourmand.lilgim.cloud. Le DNS, le certificat HTTPS, les en-têtes de sécurité, les trois conteneurs et les neuf parcours Playwright distants ont été vérifiés le 20 juillet 2026. Le board public et les deux URL sont insérés dans la copie officielle.
+
 ## Actions humaines restantes
 
-1. créer/configurer le DNS et déployer sur le VPS ;
-2. rendre public un board GitHub Projects et récupérer son URL ;
-3. insérer les deux URL dans la copie finale ;
-4. fusionner la version validée vers `main` et pousser ;
-5. déposer manuellement la copie sur Studi avant l'échéance.
+1. pousser la branche `feature/delivery-final`, ouvrir puis fusionner la PR vers `main` ;
+2. déposer manuellement la copie DOCX sur Studi avant le 23 juillet 2026 à 23 h 59.
 
-Ces actions dépendent des comptes et infrastructures de Lucas Gimenez et ne doivent pas être déclarées terminées sans vérification réelle.
+Le dépôt Studi et la fusion finale ne doivent pas être déclarés terminés sans action ou accord explicite de Lucas Gimenez.

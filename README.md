@@ -6,7 +6,7 @@ Projet réalisé dans le cadre du Titre Professionnel Développeur Web et Web Mo
 
 ## Liens essentiels
 
-- Application déployée : _à venir_
+- Application déployée : https://vite-gourmand.lilgim.cloud
 - Outil de gestion de projet : https://github.com/Lilgim/vite-gourmand/issues/15
 - Identifiants de démonstration : voir `docs/MANUEL_UTILISATEUR.pdf`
 
@@ -113,9 +113,10 @@ curl -I https://$DOMAIN                        # 200 + en-têtes de sécurité
 ```
 
 Si un reverse proxy occupe déjà les ports 80/443 sur le serveur : démarrer la
-stack sans Caddy (`docker compose -f docker-compose.prod.yml up -d --build app`)
-et faire pointer le proxy existant vers `http://127.0.0.1:3001`
-(port ajustable via `APP_PORT` dans le `.env`).
+stack avec `docker-compose.vps.yml`. L'application rejoint le réseau externe
+`nestboard-v2` utilisé par le Caddy central et reste aussi disponible sur
+`http://127.0.0.1:3001` pour le diagnostic local. C'est la configuration
+actuellement utilisée par https://vite-gourmand.lilgim.cloud.
 
 Mise à jour : `git pull && docker compose -f docker-compose.prod.yml up -d --build app`.
 
