@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL;
+const baseURL = externalBaseURL ?? "http://localhost:3000";
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,
@@ -7,7 +10,7 @@ export default defineConfig({
   retries: 0,
   reporter: [["list"]],
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL,
     trace: "retain-on-failure",
   },
   projects: [
@@ -18,10 +21,12 @@ export default defineConfig({
       testMatch: /responsive\.spec\.ts/,
     },
   ],
-  webServer: {
-    command: "bun run start",
-    url: "http://localhost:3000",
-    reuseExistingServer: true,
-    timeout: 60_000,
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        command: "bun run start",
+        url: baseURL,
+        reuseExistingServer: true,
+        timeout: 60_000,
+      },
 });
