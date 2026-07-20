@@ -49,7 +49,7 @@ export const MenuForm = ({
       {state.status === "error" && state.message && (
         <p
           role="alert"
-          className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
         >
           {state.message}
         </p>
@@ -57,7 +57,7 @@ export const MenuForm = ({
       {state.status === "success" && state.message && (
         <p
           role="status"
-          className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+          className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
         >
           {state.message}
         </p>
@@ -71,9 +71,12 @@ export const MenuForm = ({
         errors={errors?.title}
       />
       <div className="flex flex-col gap-1">
-        <label htmlFor="description" className="text-sm font-medium">
+        <label
+          htmlFor="description"
+          className="text-[13px] font-medium text-ink"
+        >
           Description{" "}
-          <span aria-hidden="true" className="text-red-700">
+          <span aria-hidden="true" className="text-primary">
             *
           </span>
         </label>
@@ -84,7 +87,7 @@ export const MenuForm = ({
           required
           defaultValue={defaults?.description}
           aria-invalid={errors?.description ? true : undefined}
-          className="rounded border border-zinc-300 px-3 py-2"
+          className="rounded-lg border border-line px-3 py-2"
         />
         {errors?.description?.map((message) => (
           <p key={message} className="text-sm text-red-700">
@@ -95,9 +98,12 @@ export const MenuForm = ({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="theme_id" className="text-sm font-medium">
+          <label
+            htmlFor="theme_id"
+            className="text-[13px] font-medium text-ink"
+          >
             Thème{" "}
-            <span aria-hidden="true" className="text-red-700">
+            <span aria-hidden="true" className="text-primary">
               *
             </span>
           </label>
@@ -106,7 +112,7 @@ export const MenuForm = ({
             name="theme_id"
             required
             defaultValue={defaults?.theme_id ?? ""}
-            className="rounded border border-zinc-300 bg-white px-3 py-2"
+            className="rounded-lg border border-line bg-white px-3 py-2"
           >
             <option value="" disabled>
               — Choisir —
@@ -124,9 +130,9 @@ export const MenuForm = ({
           ))}
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="diet_id" className="text-sm font-medium">
+          <label htmlFor="diet_id" className="text-[13px] font-medium text-ink">
             Régime{" "}
-            <span aria-hidden="true" className="text-red-700">
+            <span aria-hidden="true" className="text-primary">
               *
             </span>
           </label>
@@ -135,7 +141,7 @@ export const MenuForm = ({
             name="diet_id"
             required
             defaultValue={defaults?.diet_id ?? ""}
-            className="rounded border border-zinc-300 bg-white px-3 py-2"
+            className="rounded-lg border border-line bg-white px-3 py-2"
           >
             <option value="" disabled>
               — Choisir —
@@ -182,9 +188,9 @@ export const MenuForm = ({
       </div>
 
       <fieldset>
-        <legend className="text-sm font-medium">
+        <legend className="text-[13px] font-medium text-ink">
           Plats du menu{" "}
-          <span aria-hidden="true" className="text-red-700">
+          <span aria-hidden="true" className="text-primary">
             *
           </span>
         </legend>
@@ -210,7 +216,10 @@ export const MenuForm = ({
       </fieldset>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="conditions" className="text-sm font-medium">
+        <label
+          htmlFor="conditions"
+          className="text-[13px] font-medium text-ink"
+        >
           Conditions particulières
         </label>
         <textarea
@@ -218,15 +227,15 @@ export const MenuForm = ({
           name="conditions"
           rows={2}
           defaultValue={defaults?.conditions}
-          className="rounded border border-zinc-300 px-3 py-2"
+          className="rounded-lg border border-line px-3 py-2"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="images" className="text-sm font-medium">
+        <label htmlFor="images" className="text-[13px] font-medium text-ink">
           Galerie d'images
         </label>
-        <p id="images-hint" className="text-xs text-zinc-600">
+        <p id="images-hint" className="text-xs text-muted">
           Une image par ligne au format « /chemin/image.svg | texte alternatif
           ».
         </p>
@@ -236,14 +245,14 @@ export const MenuForm = ({
           rows={3}
           defaultValue={defaults?.images_text}
           aria-describedby="images-hint"
-          className="rounded border border-zinc-300 px-3 py-2 font-mono text-xs"
+          className="rounded-lg border border-line px-3 py-2 font-mono text-xs"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="self-start rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark disabled:opacity-60"
       >
         {pending ? "Enregistrement…" : submitLabel}
       </button>

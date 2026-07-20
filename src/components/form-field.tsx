@@ -29,17 +29,17 @@ export const FormField = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name} className="text-sm font-medium">
+      <label htmlFor={name} className="text-[13px] font-medium text-ink">
         {label}
         {required && (
-          <span aria-hidden="true" className="text-red-700">
+          <span aria-hidden="true" className="text-primary">
             {" "}
             *
           </span>
         )}
       </label>
       {hint && (
-        <p id={hintId} className="text-xs text-zinc-600">
+        <p id={hintId} className="text-xs text-muted">
           {hint}
         </p>
       )}
@@ -52,7 +52,7 @@ export const FormField = ({
         defaultValue={defaultValue}
         aria-invalid={errors?.length ? true : undefined}
         aria-describedby={describedBy}
-        className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"
+        className="rounded-lg border border-line px-3 py-2 focus:outline-2 focus:outline-primary"
       />
       {errors && errors.length > 0 && (
         // Conteneur unique : l'id référencé par aria-describedby ne doit

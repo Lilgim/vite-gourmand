@@ -1,0 +1,90 @@
+# Stack de production autonome (VPS) — projet isolé des autres stacks Docker.
+# Démarrage : docker compose -f docker-compose.prod.yml up -d --build
+# Si un reverse proxy occupe déjà 80/443 sur l'hôte : démarrer sans Caddy
+# (docker compose -f docker-compose.prod.yml up -d --build app) et brancher
+# le proxy existant sur http://127.0.0.1:${APP_PORT:-3001}.
+name: vite-gourmand-prod
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://vg:${POSTGRES_PASSWORD}@postgres:5432/vite_gourmand
+      MONGODB_URI: mongodb://mongo:27017/vite_gourmand_stats
+      AUTH_SECRET: ${AUTH_SECRET}
+      APP_URL: https://${DOMAIN}
+      EMAIL_FROM: ${EMAIL_FROM:-no-reply@vite-gourmand.example}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-contact@vite-gourmand.example}
+      # SMTP_* volontairement absents : mode test documenté (emails -> logs)
+    ports:
+      # Loopback uniquement : debug local et cas "proxy existant"
+      - "127.0.0.1:${APP_PORT:-3001}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks: [internal]
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vg
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: vite_gourmand
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vg -d vite_gourmand"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks: [internal]
+    # Aucun port publié : accessible uniquement depuis le réseau interne
+
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks: [internal]
+    # Aucun port publié : accessible uniquement depuis le réseau interne
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [app]
+    networks: [internal]
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  pg_data:
+  mongo_data:
+  caddy_data:
+  caddy_config:

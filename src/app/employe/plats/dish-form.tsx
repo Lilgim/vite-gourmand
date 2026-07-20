@@ -29,7 +29,7 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
     return (
       <p
         role="status"
-        className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+        className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
       >
         {deleteState.message}
       </p>
@@ -45,7 +45,7 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
         {state.status === "error" && state.message && (
           <p
             role="alert"
-            className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+            className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
           >
             {state.message}
           </p>
@@ -53,7 +53,7 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
         {state.status === "success" && state.message && (
           <p
             role="status"
-            className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+            className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
           >
             {state.message}
           </p>
@@ -73,7 +73,9 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
           errors={errors?.description}
         />
         <fieldset>
-          <legend className="text-sm font-medium">Allergènes</legend>
+          <legend className="text-[13px] font-medium text-ink">
+            Allergènes
+          </legend>
           <div className="mt-2 grid grid-cols-2 gap-1 sm:grid-cols-3">
             {allergens.map((allergen) => (
               <label
@@ -95,7 +97,7 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
         <button
           type="submit"
           disabled={pending}
-          className="self-start rounded bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+          className="self-start rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark disabled:opacity-60"
         >
           {pending
             ? "Enregistrement…"
@@ -111,7 +113,7 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
           {deleteState.status === "error" && deleteState.message && (
             <p
               role="alert"
-              className="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+              className="mb-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
             >
               {deleteState.message}
             </p>
@@ -124,12 +126,12 @@ export const DishForm = ({ allergens, defaults }: DishFormProps) => {
                 ? `Utilisé par ${defaults.menuCount} menu(s)`
                 : undefined
             }
-            className="rounded border border-red-300 px-3 py-1.5 text-sm font-medium text-red-800 hover:bg-red-50 disabled:opacity-50"
+            className="rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-800 hover:bg-red-50 disabled:opacity-50"
           >
             {deletePending ? "Suppression…" : "Supprimer ce plat"}
           </button>
           {defaults.menuCount > 0 && (
-            <span className="ml-2 text-xs text-zinc-600">
+            <span className="ml-2 text-xs text-muted">
               Utilisé par {defaults.menuCount} menu(s) — retirez-le des menus
               pour pouvoir le supprimer.
             </span>

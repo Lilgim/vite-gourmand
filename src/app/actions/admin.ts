@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { hashPassword, requireRole } from "@/lib/auth";
 import { query, queryOne } from "@/lib/db";
-import { type FormState, registerSchema } from "@/lib/validation";
+import { employeeAccountMail, sendMail } from "@/lib/mailer";
+import { employeeAccountSchema, type FormState } from "@/lib/validation";
 
 // La création de comptes employés est réservée à l'administrateur :
 // aucun compte employé/admin ne peut naître de l'interface publique.
@@ -13,7 +14,7 @@ export const createEmployee = async (
 ): Promise<FormState> => {
   await requireRole("admin");
 
-  const parsed = registerSchema.safeParse({
+  const parsed = employeeAccountSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
     first_name: formData.get("first_name"),
@@ -47,6 +48,8 @@ export const createEmployee = async (
      VALUES ($1, $2, $3, $4, $5, 'employee')`,
     [email.toLowerCase(), passwordHash, first_name, last_name, phone || null],
   );
+
+  await sendMail(employeeAccountMail(email, first_name));
 
   revalidatePath("/admin/employes");
   return { status: "success", message: "Compte employé créé." };

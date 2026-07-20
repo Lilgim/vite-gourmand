@@ -1,21 +1,12 @@
 projet: vite-gourmand
-phase: construction — 10/12 stories livrées
-statut: EN_COURS
+phase: livraison — application et documents validés, publication Git restante
+statut: PRET_A_PUBLIER
 deadline_ecf: 2026-07-23T23:59:00+02:00
 depot_github: https://github.com/Lilgim/vite-gourmand
 branches:
-  - main
-  - dev
-  - feature/db-foundations (PR 1, review traitée)
-  - feature/auth (PR 2, review traitée)
-  - feature/public-pages (PR 3, review sans finding)
-  - feature/menus (PR 4, review sans finding)
-  - feature/order (PR 5, review traitée)
-  - feature/order-tracking (PR 6)
-  - feature/reviews (PR 7)
-  - feature/employee (PR 8)
-  - feature/admin (PR 9)
-  - feature/tests (PR 10)
+  - main (à jour — PR 12 dev→main mergée le 2026-07-18)
+  - dev (à jour — PR 1→11 mergées dans l'ordre le 2026-07-18)
+  - feature/* (conservées pour traçabilité, toutes mergées)
 fait:
   - fondations données (docker, scripts SQL testés sur base vide, clients PG/Mongo)
   - authentification sessions + rôles, gardes serveur
@@ -26,10 +17,20 @@ fait:
   - avis 1-5 après commande terminée + modération employé
   - espace employé (commandes filtrables, machine à états, CRUD menus/plats/horaires)
   - espace admin (comptes employés, stats MongoDB filtrables avec graphique)
-  - 16 tests unitaires + 9 parcours e2e Playwright (4 rôles + responsive)
+  - 21 tests unitaires + 9 parcours e2e Playwright (4 rôles + responsive)
+  - story-hardening (headers sécurité, emails transactionnels mode test, passe RGAA)
+  - PR 1→11 mergées dans dev, PR 12 dev→main mergée (2026-07-18, vérifs lint/typecheck/test/build vertes)
+  - infra de déploiement (Dockerfile multistage, docker-compose.prod.yml isolé, Caddy TLS) — PR 13, validée par run local (stack healthy, seed, smoke test HTTP 200/CSP)
+  - passe design charte « Crème & Bordeaux » appliquée à tout le front — PR 14 (Paper : 3 maquettes desktop + 3 mobiles ; lint/tsc/test/build/e2e verts, audit visuel réel)
+  - audit final du sujet : inscription complète, mot de passe oublié, contact, emails obligatoires, filtres prix/menu et build hors ligne
+  - livrables : manuel PDF, charte PDF, documentation technique/projet, source anglophone, veille, matrice et copie DOCX préparés
+  - board public : https://github.com/Lilgim/vite-gourmand/issues/15
+  - déploiement HTTPS validé : https://vite-gourmand.lilgim.cloud (DNS, certificat, CSP, services sains)
+  - 9 parcours Playwright rejoués avec succès contre l'URL publique le 2026-07-20
+  - copie officielle complétée avec date de naissance, URL de production, board et identifiants
 actions_humaines_requises:
-  - merger les PR 1→10 dans l'ordre (merge auto interdit par la politique du projet)
-  - choisir/valider l'hébergement (app + PostgreSQL + MongoDB) — dépense
+  - pousser la branche feature/delivery-final, ouvrir puis fusionner la PR vers main
+  - déposer manuellement la copie finale sur Studi avant le 23 juillet 2026 à 23 h 59
 prochaines_etapes:
-  - story-hardening : headers sécurité, emails transactionnels (env test), passe RGAA complète
-  - story-delivery : déploiement HTTPS, manuel utilisateur PDF, charte graphique PDF (3 maquettes desktop + 3 mobiles), doc technique (MCD, cas d'utilisation, séquence), board de gestion de projet public, source anglophone, veille sécurité, copie officielle
+  - publier la branche validée sur GitHub puis fusionner vers main après accord de Lucas
+  - déposer le DOCX final sur Studi

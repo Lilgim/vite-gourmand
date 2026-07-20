@@ -26,7 +26,7 @@ export const ToggleMenuButton = ({
       <button
         type="submit"
         disabled={pending}
-        className="text-zinc-700 underline disabled:opacity-60"
+        className="text-ink underline disabled:opacity-60"
       >
         {isActive ? "Masquer" : "Publier"}
         <span className="sr-only"> le menu {title}</span>

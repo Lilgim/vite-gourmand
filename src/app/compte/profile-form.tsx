@@ -28,7 +28,7 @@ export const ProfileForm = ({ defaults }: ProfileFormProps) => {
       {state.status === "success" && state.message && (
         <p
           role="status"
-          className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+          className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
         >
           {state.message}
         </p>
@@ -85,7 +85,7 @@ export const ProfileForm = ({ defaults }: ProfileFormProps) => {
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="self-start rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark disabled:opacity-60"
       >
         {pending ? "Enregistrement…" : "Enregistrer mes informations"}
       </button>

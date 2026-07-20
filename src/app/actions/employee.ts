@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { query, queryOne, withTransaction } from "@/lib/db";
 import { ORDER_STATUS_LABELS } from "@/lib/labels";
-import { sendMail, statusChangeMail } from "@/lib/mailer";
+import { equipmentReturnMail, sendMail, statusChangeMail } from "@/lib/mailer";
 import { getOrderStatsCollection } from "@/lib/mongo";
 import {
   canTransition,
@@ -107,12 +107,18 @@ export const advanceOrderStatus = async (
 
   // Le client est informé de chaque changement de statut (mode test si SMTP absent).
   await sendMail(
-    statusChangeMail(
-      order.client_email,
-      order.client_first_name,
-      orderId,
-      ORDER_STATUS_LABELS[newStatus] ?? newStatus,
-    ),
+    newStatus === "awaiting_equipment_return"
+      ? equipmentReturnMail(
+          order.client_email,
+          order.client_first_name,
+          orderId,
+        )
+      : statusChangeMail(
+          order.client_email,
+          order.client_first_name,
+          orderId,
+          ORDER_STATUS_LABELS[newStatus] ?? newStatus,
+        ),
   );
 
   revalidatePath(`/employe/commandes/${orderId}`);

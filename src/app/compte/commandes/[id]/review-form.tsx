@@ -27,7 +27,7 @@ export const ReviewForm = ({ orderId }: ReviewFormProps) => {
     return (
       <p
         role="status"
-        className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+        className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
       >
         {state.message}
       </p>
@@ -41,16 +41,16 @@ export const ReviewForm = ({ orderId }: ReviewFormProps) => {
       {state.status === "error" && state.message && (
         <p
           role="alert"
-          className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
         >
           {state.message}
         </p>
       )}
 
       <fieldset>
-        <legend className="text-sm font-medium">
+        <legend className="text-[13px] font-medium text-ink">
           Votre note{" "}
-          <span aria-hidden="true" className="text-red-700">
+          <span aria-hidden="true" className="text-primary">
             *
           </span>
         </legend>
@@ -58,10 +58,10 @@ export const ReviewForm = ({ orderId }: ReviewFormProps) => {
           {[1, 2, 3, 4, 5].map((value) => (
             <label
               key={value}
-              className={`cursor-pointer rounded border px-3 py-1.5 text-sm ${
+              className={`cursor-pointer rounded-lg border px-3 py-1.5 text-sm ${
                 rating === value
-                  ? "border-emerald-700 bg-emerald-700 text-white"
-                  : "border-zinc-300 hover:bg-zinc-50"
+                  ? "border-primary bg-primary text-white"
+                  : "border-line hover:bg-bg"
               }`}
             >
               <input
@@ -84,9 +84,9 @@ export const ReviewForm = ({ orderId }: ReviewFormProps) => {
       </fieldset>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="comment" className="text-sm font-medium">
+        <label htmlFor="comment" className="text-[13px] font-medium text-ink">
           Votre avis{" "}
-          <span aria-hidden="true" className="text-red-700">
+          <span aria-hidden="true" className="text-primary">
             *
           </span>
         </label>
@@ -98,7 +98,7 @@ export const ReviewForm = ({ orderId }: ReviewFormProps) => {
           minLength={10}
           maxLength={1000}
           aria-invalid={errors?.comment ? true : undefined}
-          className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"
+          className="rounded-lg border border-line px-3 py-2 focus:outline-2 focus:outline-primary"
         />
         {errors?.comment?.map((message) => (
           <p key={message} className="text-sm text-red-700">
@@ -110,7 +110,7 @@ export const ReviewForm = ({ orderId }: ReviewFormProps) => {
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="self-start rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark disabled:opacity-60"
       >
         {pending ? "Envoi…" : "Déposer mon avis"}
       </button>

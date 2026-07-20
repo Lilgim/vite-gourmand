@@ -94,3 +94,31 @@ export const statusChangeMail = (
     "L'équipe Vite & Gourmand",
   ].join("\n"),
 });
+
+export const welcomeMail = (to: string, firstName: string): Mail => ({
+  to,
+  subject: "Bienvenue chez Vite & Gourmand",
+  text: `Bonjour ${firstName},\n\nVotre compte a bien été créé. Vous pouvez désormais commander nos menus et suivre vos commandes depuis votre espace.\n\nL'équipe Vite & Gourmand`,
+});
+
+export const employeeAccountMail = (to: string, firstName: string): Mail => ({
+  to,
+  subject: "Votre compte employé Vite & Gourmand",
+  text: `Bonjour ${firstName},\n\nUn compte employé a été créé pour vous. Pour des raisons de sécurité, le mot de passe n'est pas communiqué par email : rapprochez-vous de l'administrateur pour l'obtenir.\n\nL'équipe Vite & Gourmand`,
+});
+
+export const passwordResetMail = (to: string, resetUrl: string): Mail => ({
+  to,
+  subject: "Réinitialisation de votre mot de passe",
+  text: `Une réinitialisation de mot de passe a été demandée pour votre compte.\n\nUtilisez ce lien dans les 30 minutes : ${resetUrl}\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez cet email.`,
+});
+
+export const equipmentReturnMail = (
+  to: string,
+  firstName: string,
+  orderId: number,
+): Mail => ({
+  to,
+  subject: `Commande n° ${orderId} — retour du matériel`,
+  text: `Bonjour ${firstName},\n\nVotre commande n° ${orderId} est en attente du retour du matériel. Merci de contacter Vite & Gourmand pour organiser sa restitution. Conformément aux conditions générales de vente, si le matériel n'est pas restitué sous 10 jours ouvrés, 600 € de frais seront dus.\n\nL'équipe Vite & Gourmand`,
+});

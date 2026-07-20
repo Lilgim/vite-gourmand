@@ -11,10 +11,10 @@ export default async function EmployeMenusPage() {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Menus</h1>
+        <h1 className="text-2xl">Menus</h1>
         <Link
           href="/employe/menus/nouveau"
-          className="rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800"
+          className="rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark"
         >
           Créer un menu
         </Link>
@@ -24,7 +24,7 @@ export default async function EmployeMenusPage() {
         <table className="w-full border-collapse text-sm">
           <caption className="sr-only">Tous les menus, actifs ou non</caption>
           <thead>
-            <tr className="border-b border-zinc-300 text-left">
+            <tr className="border-b border-line text-left">
               <th scope="col" className="py-2 pr-4">
                 Titre
               </th>
@@ -47,10 +47,7 @@ export default async function EmployeMenusPage() {
           </thead>
           <tbody>
             {menus.map((menu) => (
-              <tr
-                key={menu.id}
-                className="border-b border-zinc-200 last:border-0"
-              >
+              <tr key={menu.id} className="border-b border-line last:border-0">
                 <td className="py-2 pr-4 font-medium">{menu.title}</td>
                 <td className="py-2 pr-4">
                   {menu.theme} · {menu.diet}
@@ -67,7 +64,7 @@ export default async function EmployeMenusPage() {
                 <td className="flex gap-3 py-2">
                   <Link
                     href={`/employe/menus/${menu.id}`}
-                    className="text-emerald-800 underline"
+                    className="text-primary underline"
                   >
                     Modifier
                     <span className="sr-only"> le menu {menu.title}</span>

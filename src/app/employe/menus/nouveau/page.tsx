@@ -18,7 +18,7 @@ export default async function NouveauMenuPage() {
 
   return (
     <div className="mt-6 max-w-2xl">
-      <h1 className="text-2xl font-bold">Créer un menu</h1>
+      <h1 className="text-2xl">Créer un menu</h1>
       <MenuForm
         action={createMenu}
         themes={themes}

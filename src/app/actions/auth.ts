@@ -8,7 +8,18 @@ import {
   verifyPassword,
 } from "@/lib/auth";
 import { queryOne } from "@/lib/db";
-import { type FormState, loginSchema, registerSchema } from "@/lib/validation";
+import { passwordResetMail, sendMail, welcomeMail } from "@/lib/mailer";
+import {
+  createPasswordResetToken,
+  verifyPasswordResetToken,
+} from "@/lib/password-reset";
+import {
+  emailSchema,
+  type FormState,
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+} from "@/lib/validation";
 
 export const register = async (
   _prev: FormState,
@@ -20,6 +31,9 @@ export const register = async (
     first_name: formData.get("first_name"),
     last_name: formData.get("last_name"),
     phone: formData.get("phone"),
+    address: formData.get("address"),
+    postal_code: formData.get("postal_code"),
+    city: formData.get("city"),
   });
 
   if (!parsed.success) {
@@ -29,7 +43,16 @@ export const register = async (
     };
   }
 
-  const { email, password, first_name, last_name, phone } = parsed.data;
+  const {
+    email,
+    password,
+    first_name,
+    last_name,
+    phone,
+    address,
+    postal_code,
+    city,
+  } = parsed.data;
 
   const existing = await queryOne<{ id: number }>(
     "SELECT id FROM users WHERE email = $1",
@@ -47,16 +70,94 @@ export const register = async (
   // Rôle 'client' imposé : aucun compte employé/admin ne peut être créé
   // depuis l'interface publique (exigence du sujet).
   const user = await queryOne<{ id: number }>(
-    `INSERT INTO users (email, password_hash, first_name, last_name, phone, role)
-     VALUES ($1, $2, $3, $4, $5, 'client') RETURNING id`,
-    [email.toLowerCase(), passwordHash, first_name, last_name, phone || null],
+    `INSERT INTO users
+       (email, password_hash, first_name, last_name, phone, address, postal_code, city, role)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'client') RETURNING id`,
+    [
+      email.toLowerCase(),
+      passwordHash,
+      first_name,
+      last_name,
+      phone,
+      address,
+      postal_code,
+      city,
+    ],
   );
   if (!user) {
     return { status: "error", message: "Création du compte impossible." };
   }
 
+  await sendMail(welcomeMail(email, first_name));
   await createSession(user.id);
   redirect("/");
+};
+
+export const requestPasswordReset = async (
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> => {
+  const parsed = emailSchema.safeParse({ email: formData.get("email") });
+  if (!parsed.success)
+    return { status: "error", errors: z_flatten(parsed.error) };
+
+  const email = parsed.data.email.toLowerCase();
+  const user = await queryOne<{ id: number }>(
+    "SELECT id FROM users WHERE email = $1 AND is_active",
+    [email],
+  );
+  if (user) {
+    const token = createPasswordResetToken(email);
+    const baseUrl = (process.env.APP_URL ?? "http://localhost:3000").replace(
+      /\/$/,
+      "",
+    );
+    await sendMail(
+      passwordResetMail(
+        email,
+        `${baseUrl}/reinitialiser-mot-de-passe?token=${encodeURIComponent(token)}`,
+      ),
+    );
+  }
+
+  return {
+    status: "success",
+    message: "Si ce compte existe, un lien de réinitialisation a été envoyé.",
+  };
+};
+
+export const resetPassword = async (
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> => {
+  const parsed = resetPasswordSchema.safeParse({
+    token: formData.get("token"),
+    password: formData.get("password"),
+  });
+  if (!parsed.success)
+    return { status: "error", errors: z_flatten(parsed.error) };
+
+  const email = verifyPasswordResetToken(parsed.data.token);
+  if (!email) {
+    return { status: "error", message: "Ce lien est invalide ou a expiré." };
+  }
+
+  const passwordHash = await hashPassword(parsed.data.password);
+  const updated = await queryOne<{ id: number }>(
+    `UPDATE users SET password_hash = $1
+      WHERE email = $2 AND is_active
+      RETURNING id`,
+    [passwordHash, email],
+  );
+  if (!updated) return { status: "error", message: "Compte introuvable." };
+
+  await queryOne("DELETE FROM sessions WHERE user_id = $1 RETURNING id", [
+    updated.id,
+  ]);
+  return {
+    status: "success",
+    message: "Mot de passe modifié. Vous pouvez vous connecter.",
+  };
 };
 
 export const login = async (

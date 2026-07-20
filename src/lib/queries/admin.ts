@@ -16,6 +16,7 @@ export type MenuStat = {
 export const getMenuStats = async (
   from?: Date,
   to?: Date,
+  menuId?: number,
 ): Promise<MenuStat[]> => {
   const statsDb = await getStatsDb();
   const match: Record<string, unknown> = { status: { $ne: "cancelled" } };
@@ -25,6 +26,7 @@ export const getMenuStats = async (
       ...(to ? { $lte: to } : {}),
     };
   }
+  if (menuId) match.menuId = menuId;
 
   const results = await statsDb
     .collection("order_stats")
@@ -52,6 +54,11 @@ export const getMenuStats = async (
     revenue: Math.round(entry.revenue * 100) / 100,
   }));
 };
+
+export type AdminMenuOption = { id: number; title: string };
+
+export const getAdminMenuOptions = (): Promise<AdminMenuOption[]> =>
+  query<AdminMenuOption>("SELECT id, title FROM menus ORDER BY title");
 
 // ---------- Comptes employés ----------
 

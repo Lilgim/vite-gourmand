@@ -73,7 +73,7 @@ export const OrderForm = ({
       {state.status === "error" && state.message && (
         <p
           role="alert"
-          className="rounded bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
         >
           {state.message}
         </p>
@@ -81,20 +81,23 @@ export const OrderForm = ({
       {state.status === "success" && state.message && (
         <p
           role="status"
-          className="rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+          className="rounded-lg bg-badge px-3 py-2 text-sm text-primary"
         >
           {state.message}
         </p>
       )}
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="people_count" className="text-sm font-medium">
+        <label
+          htmlFor="people_count"
+          className="text-[13px] font-medium text-ink"
+        >
           Nombre de convives{" "}
-          <span aria-hidden="true" className="text-red-700">
+          <span aria-hidden="true" className="text-primary">
             *
           </span>
         </label>
-        <p id="people_count-hint" className="text-xs text-zinc-600">
+        <p id="people_count-hint" className="text-xs text-muted">
           Minimum {minPeople} personnes. Une remise de 10 % s'applique à partir
           de {minPeople + DISCOUNT_PEOPLE_THRESHOLD} convives.
         </p>
@@ -108,7 +111,7 @@ export const OrderForm = ({
           onChange={(event) => setPeopleCount(event.target.valueAsNumber)}
           aria-describedby="people_count-hint"
           aria-invalid={errors?.people_count ? true : undefined}
-          className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"
+          className="rounded-lg border border-line px-3 py-2 focus:outline-2 focus:outline-primary"
         />
         {errors?.people_count?.map((message) => (
           <p key={message} className="text-sm text-red-700">
@@ -154,9 +157,12 @@ export const OrderForm = ({
           errors={errors?.event_postal_code}
         />
         <div className="flex flex-col gap-1">
-          <label htmlFor="event_city" className="text-sm font-medium">
+          <label
+            htmlFor="event_city"
+            className="text-[13px] font-medium text-ink"
+          >
             Ville{" "}
-            <span aria-hidden="true" className="text-red-700">
+            <span aria-hidden="true" className="text-primary">
               *
             </span>
           </label>
@@ -168,7 +174,7 @@ export const OrderForm = ({
             value={city}
             onChange={(event) => setCity(event.target.value)}
             aria-invalid={errors?.event_city ? true : undefined}
-            className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"
+            className="rounded-lg border border-line px-3 py-2 focus:outline-2 focus:outline-primary"
           />
           {errors?.event_city?.map((message) => (
             <p key={message} className="text-sm text-red-700">
@@ -180,13 +186,16 @@ export const OrderForm = ({
 
       {!freeDelivery && city.trim() !== "" && (
         <div className="flex flex-col gap-1">
-          <label htmlFor="distance_km" className="text-sm font-medium">
+          <label
+            htmlFor="distance_km"
+            className="text-[13px] font-medium text-ink"
+          >
             Distance depuis notre boutique de Bordeaux (km){" "}
-            <span aria-hidden="true" className="text-red-700">
+            <span aria-hidden="true" className="text-primary">
               *
             </span>
           </label>
-          <p id="distance_km-hint" className="text-xs text-zinc-600">
+          <p id="distance_km-hint" className="text-xs text-muted">
             Hors Bordeaux, la livraison est facturée 5 € + 0,59 €/km. La
             distance est vérifiée lors de la préparation de la commande.
           </p>
@@ -202,7 +211,7 @@ export const OrderForm = ({
             onChange={(event) => setDistanceKm(event.target.valueAsNumber)}
             aria-describedby="distance_km-hint"
             aria-invalid={errors?.distance_km ? true : undefined}
-            className="rounded border border-zinc-300 px-3 py-2 focus:outline-2 focus:outline-emerald-700"
+            className="rounded-lg border border-line px-3 py-2 focus:outline-2 focus:outline-primary"
           />
           {errors?.distance_km?.map((message) => (
             <p key={message} className="text-sm text-red-700">
@@ -226,7 +235,7 @@ export const OrderForm = ({
       <section
         aria-label="Détail du prix"
         aria-live="polite"
-        className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm"
+        className="rounded-[10px] border border-line bg-badge p-4 text-sm"
       >
         <h2 className="font-bold">Détail du prix</h2>
         <dl className="mt-2 space-y-1">
@@ -253,7 +262,7 @@ export const OrderForm = ({
                 : formatEuros(price.deliveryFee)}
             </dd>
           </div>
-          <div className="flex justify-between border-t border-emerald-300 pt-2 font-bold">
+          <div className="flex justify-between border-t border-line pt-2 font-bold">
             <dt>Total</dt>
             <dd>{formatEuros(price.totalPrice)}</dd>
           </div>
@@ -263,7 +272,7 @@ export const OrderForm = ({
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-primary-dark disabled:opacity-60"
       >
         {pending ? pendingLabel : submitLabel}
       </button>

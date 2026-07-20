@@ -41,28 +41,31 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <nav aria-label="Fil d'Ariane" className="text-sm text-zinc-600">
+      <nav
+        aria-label="Fil d'Ariane"
+        className="text-xs uppercase tracking-widest text-muted"
+      >
         <Link href="/compte" className="hover:underline">
           Mon compte
         </Link>{" "}
         / <span aria-current="page">Commande n° {order.id}</span>
       </nav>
 
-      <h1 className="mt-4 text-3xl font-bold">Commande n° {order.id}</h1>
-      <p className="mt-2 rounded bg-emerald-50 px-3 py-2 font-medium text-emerald-900">
+      <h1 className="mt-4 text-3xl">Commande n° {order.id}</h1>
+      <p className="mt-2 rounded-lg bg-badge px-3 py-2 font-medium text-primary">
         {ORDER_STATUS_LABELS[order.current_status] ?? order.current_status}
       </p>
 
       {order.current_status === "submitted" && (
-        <div className="mt-4 flex flex-col gap-3 rounded border border-zinc-200 p-4">
-          <p className="text-sm text-zinc-700">
+        <div className="mt-4 flex flex-col gap-3 rounded-lg border border-line p-4">
+          <p className="text-sm text-ink">
             Tant que la commande n'a pas été acceptée, vous pouvez la modifier
             (sauf le menu) ou l'annuler.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href={`/compte/commandes/${order.id}/modifier`}
-              className="rounded border border-emerald-700 px-3 py-1.5 text-sm font-medium text-emerald-800 hover:bg-emerald-50"
+              className="rounded-lg border border-primary px-3 py-1.5 text-sm font-medium text-primary hover:bg-bg"
             >
               Modifier la commande
             </Link>
@@ -72,24 +75,24 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
       )}
 
       <section aria-labelledby="titre-recap" className="mt-8">
-        <h2 id="titre-recap" className="text-xl font-bold">
+        <h2 id="titre-recap" className="text-xl">
           Récapitulatif
         </h2>
         <dl className="mt-3 space-y-2 text-sm">
-          <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-            <dt className="text-zinc-600">Menu</dt>
+          <div className="flex justify-between gap-4 border-b border-line pb-2">
+            <dt className="text-muted">Menu</dt>
             <dd className="font-medium">
               <Link href={`/menus/${order.menu_id}`} className="underline">
                 {order.menu_title}
               </Link>
             </dd>
           </div>
-          <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-            <dt className="text-zinc-600">Convives</dt>
+          <div className="flex justify-between gap-4 border-b border-line pb-2">
+            <dt className="text-muted">Convives</dt>
             <dd className="font-medium">{order.people_count} personnes</dd>
           </div>
-          <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-            <dt className="text-zinc-600">Date et heure</dt>
+          <div className="flex justify-between gap-4 border-b border-line pb-2">
+            <dt className="text-muted">Date et heure</dt>
             <dd className="font-medium">
               {new Date(order.event_date).toLocaleDateString("fr-FR", {
                 dateStyle: "long",
@@ -97,22 +100,22 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
               à {order.event_time.slice(0, 5).replace(":", "h")}
             </dd>
           </div>
-          <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-            <dt className="text-zinc-600">Lieu</dt>
+          <div className="flex justify-between gap-4 border-b border-line pb-2">
+            <dt className="text-muted">Lieu</dt>
             <dd className="text-right font-medium">
               {order.event_address}, {order.event_postal_code}{" "}
               {order.event_city}
             </dd>
           </div>
-          <div className="flex justify-between gap-4 border-b border-zinc-200 pb-2">
-            <dt className="text-zinc-600">GSM</dt>
+          <div className="flex justify-between gap-4 border-b border-line pb-2">
+            <dt className="text-muted">GSM</dt>
             <dd className="font-medium">{order.phone}</dd>
           </div>
         </dl>
       </section>
 
       <section aria-labelledby="titre-prix" className="mt-8">
-        <h2 id="titre-prix" className="text-xl font-bold">
+        <h2 id="titre-prix" className="text-xl">
           Détail du prix
         </h2>
         <dl className="mt-3 space-y-2 text-sm">
@@ -143,7 +146,7 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
                 : "Offerte"}
             </dd>
           </div>
-          <div className="flex justify-between gap-4 border-t border-zinc-300 pt-2 font-bold">
+          <div className="flex justify-between gap-4 border-t border-line pt-2 font-bold">
             <dt>Total</dt>
             <dd>{euros(order.total_price)}</dd>
           </div>
@@ -151,20 +154,18 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
       </section>
 
       <section aria-labelledby="titre-suivi" className="mt-8">
-        <h2 id="titre-suivi" className="text-xl font-bold">
+        <h2 id="titre-suivi" className="text-xl">
           Suivi de la commande
         </h2>
-        <ol className="mt-3 space-y-3 border-l-2 border-emerald-200 pl-4">
+        <ol className="mt-3 space-y-3 border-l-2 border-line pl-4">
           {history.map((entry) => (
             <li key={`${entry.status}-${entry.created_at}`} className="text-sm">
               <p className="font-medium">
                 {ORDER_STATUS_LABELS[entry.status] ?? entry.status}
               </p>
-              <p className="text-zinc-600">
-                {formatDateTime(entry.created_at)}
-              </p>
+              <p className="text-muted">{formatDateTime(entry.created_at)}</p>
               {entry.reason && (
-                <p className="text-zinc-600">
+                <p className="text-muted">
                   Motif : {entry.reason}
                   {entry.contact_mode && ` (contact : ${entry.contact_mode})`}
                 </p>
@@ -176,26 +177,26 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
 
       {order.current_status === "completed" && (
         <section aria-labelledby="titre-avis" className="mt-8">
-          <h2 id="titre-avis" className="text-xl font-bold">
+          <h2 id="titre-avis" className="text-xl">
             Votre avis
           </h2>
           {review ? (
-            <div className="mt-3 rounded border border-zinc-200 p-4 text-sm">
-              <p aria-hidden="true" className="text-amber-500">
+            <div className="mt-3 rounded-lg border border-line p-4 text-sm">
+              <p aria-hidden="true" className="text-primary">
                 {"★".repeat(review.rating)}
-                <span className="text-zinc-300">
+                <span className="text-line">
                   {"★".repeat(5 - review.rating)}
                 </span>
               </p>
               <p className="sr-only">Note : {review.rating} sur 5</p>
-              <p className="mt-2 text-zinc-700">{review.comment}</p>
-              <p className="mt-2 font-medium text-zinc-600">
+              <p className="mt-2 text-ink">{review.comment}</p>
+              <p className="mt-2 font-medium text-muted">
                 {REVIEW_STATUS_LABELS[review.status]}
               </p>
             </div>
           ) : (
             <div className="mt-3">
-              <p className="mb-3 text-sm text-zinc-600">
+              <p className="mb-3 text-sm text-muted">
                 Votre commande est terminée : partagez votre expérience ! Votre
                 avis sera relu par notre équipe avant publication.
               </p>

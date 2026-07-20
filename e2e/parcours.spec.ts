@@ -83,6 +83,10 @@ test.describe.serial("parcours ECF complet", () => {
     await page.getByLabel("Prénom").fill("Éva");
     await page.getByLabel(/^Nom\b/).fill("Testeuse");
     await page.getByLabel("Adresse email").fill(CLIENT.email);
+    await page.getByLabel("Téléphone").fill("0612345678");
+    await page.getByLabel("Adresse postale").fill("12 rue Sainte-Catherine");
+    await page.getByLabel("Code postal").fill("33000");
+    await page.getByLabel("Ville").fill("Bordeaux");
     await page.getByLabel("Mot de passe").fill(CLIENT.password);
     await page.getByRole("button", { name: "Créer mon compte" }).click();
     await page.waitForURL("/");
@@ -217,7 +221,10 @@ test.describe.serial("parcours ECF complet", () => {
     ).toBeVisible();
     // La nouvelle commande apparaît dans les stats du menu Anniversaire
     await expect(
-      page.getByText("Menu Anniversaire Gourmand").first(),
+      page.getByRole("cell", {
+        name: "Menu Anniversaire Gourmand",
+        exact: true,
+      }),
     ).toBeVisible();
 
     // Création d'un compte employé
