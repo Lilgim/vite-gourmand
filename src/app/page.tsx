@@ -86,14 +86,14 @@ export default async function HomePage() {
           <div className="landing-reveal landing-delay relative mx-auto h-[520px] w-full max-w-[650px] sm:h-[610px]">
             <div className="absolute right-0 top-0 h-[84%] w-[80%] overflow-hidden rounded-t-[11rem] bg-[#e6d4cd] shadow-[0_30px_80px_rgba(64,32,40,0.16)]">
               <Image
-                src="/images/menus/prestige-mariage-1.svg"
+                src="/images/menus/prestige-mariage-1.jpg"
                 alt="Composition du menu Prestige Mariage"
                 fill
                 priority
                 sizes="(max-width: 1024px) 80vw, 44vw"
                 className="object-cover"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary-dark/80 to-transparent px-7 pb-7 pt-24 text-white">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary-dark/85 to-transparent px-7 pb-7 pt-24 text-right text-white">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/70">
                   La signature maison
                 </p>
@@ -102,7 +102,7 @@ export default async function HomePage() {
             </div>
             <div className="absolute bottom-0 left-0 w-[48%] overflow-hidden rounded-[1.5rem] border-[6px] border-bg bg-surface shadow-2xl">
               <Image
-                src="/images/menus/cocktail-entreprise-1.svg"
+                src="/images/menus/cocktail-entreprise-1.jpg"
                 alt="Composition du buffet Cocktail Entreprise"
                 width={800}
                 height={500}
