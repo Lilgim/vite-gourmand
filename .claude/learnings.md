@@ -79,6 +79,41 @@ de prix, suivi horodaté, modération d'avis et statistiques NoSQL.
    contraintes CHECK manquantes, aria-describedby dupliqué, double requête DB.
 3. Sur Windows/PowerShell : jamais de `-replace | Set-Content` sur un fichier accentué
    (mojibake), jamais de header `Cookie` via `-Headers` (silencieusement ignoré).
+## Tests E2E — Authentification / Compte / Contrôle d'accès (session du 21/07)
+
+**Ce qu'on a fait :** création de `e2e/auth.spec.ts` (18 tests, domaine "auth") couvrant les rejets de mot de passe (5 violations testées individuellement), inscription réussie + rôle client, connexion/déconnexion avec compte seedé et compte créé à la volée, anti-énumération sur mot de passe oublié (message identique email existant/inexistant), persistance du profil après reload, contrôle d'accès par rôle (client vs employe/admin) et sans session, et vérification httpOnly du cookie `vg_session`. 18/18 passent en 14 s.
+
+**Pourquoi ces choix :**
+- Sélecteurs `page.locator("#field_id")` plutôt que `getByLabel("Nom")` : les labels avec `*` requis ont un texte accessible "Nom *" — `exact: true` échoue, et sans `exact` Playwright résout vers plusieurs éléments ("Prénom" et "Nom" partagent le substring). L'`id` du champ (`name={name}` → `id={name}`) est le sélecteur stable.
+- Test d'identité des messages (anti-énumération) : récupérer les deux textes et les comparer `===` — plus robuste qu'un assert textuel fixé manuellement.
+- `context.cookies()` pour vérifier `httpOnly` sans exécuter de JS dans la page.
+
+**Concepts clés :**
+- Playwright strict mode : `getByLabel("Nom")` retourne N > 1 si le texte accessible est un substring d'un autre label → toujours préférer `#id` quand disponible.
+- `page.context().clearCookies()` dans un test permet de simuler une session expirée sans redémarrer le navigateur.
+
+**Fichiers modifiés :** `e2e/auth.spec.ts` (créé).
+
+**À retenir :** toujours inspecter les textes accessibles réels (y compris les `*` injectés par aria) avant d'écrire des `getByLabel` — un label visuellement "Nom" peut valoir "Nom *" pour les AT et donc pour Playwright.
+
+## Tests E2E — Tunnel de commande (session du 21/07)
+
+**Ce qu'on a fait :** création de `e2e/commande.spec.ts` (12 tests, domaine "commande client") couvrant l'accès visiteur, pré-remplissage, minimum convives, règles de prix (remise 10 % à min+5, livraison gratuite Bordeaux, 5€+0,59€/km hors Bordeaux), validation → historique, suivi horodaté, modification/annulation et verrou après acceptation employé. 12/12 passent en 18 s sans réinitialiser la base.
+
+**Pourquoi ces choix :**
+- Email unique par test (`client-order-${Date.now()}@example.com`) pour isoler les commandes quand d'autres agents tournent en parallèle sur la même base.
+- Calculs de prix en centimes reproduits dans le test (fonction miroir de `pricing.ts`) pour comparer attendu vs affiché — essentiel pour détecter les bugs d'arrondi.
+- Sélecteurs `.locator("dd").first()` et `.locator("dd").last()` plutôt que `getByText()` nu pour éviter les "strict mode violations" quand base = total (même valeur dans deux `<dd>`).
+
+**Concepts clés :**
+- Playwright strict mode : si un locator retourne N > 1 éléments, l'assertion échoue — utiliser `.first()`, `.last()`, `.nth()` ou `filter({ hasText: exact })`.
+- `getByRole("region", { name: "Détail du prix" })` cible le `<section aria-label>` — bon point d'ancrage, mais les `<dd>` internes peuvent partager la même valeur quand base = total.
+- `browser.newContext()` dans un même test permet d'ouvrir une session employé sans fermer la session client — utile pour le test du verrou.
+
+**Fichiers modifiés :** `e2e/commande.spec.ts` (créé).
+
+**À retenir :** pour tester des règles de prix critiques, toujours coder la formule en miroir dans le test et comparer bit à bit — un assert sur "le prix affiché est positif" ne valide rien.
+
 # Session de livraison finale — 19/07/2026
 
 - Audit direct des 12 pages du sujet : plusieurs exigences étaient absentes malgré les stories marquées passées (contact, mot de passe oublié, emails, adresse à l'inscription, filtres complets).
@@ -88,3 +123,27 @@ de prix, suivi horodaté, modération d'avis et statistiques NoSQL.
 - Board public créé sous forme d'issue GitHub à checklist : issue 15.
 - Copie officielle recréée en DOCX hors dépôt public ; trois données restent humaines : date de naissance, URL prod et dépôt Studi.
 - Validation finale : lint/tsc/build/21 tests verts ; E2E bloqué par le service Docker Desktop Windows, ne jamais le déclarer exécuté.
+
+## Tests E2E — Domaine EMPLOYÉ (session du 21/07)
+
+**Ce qu'on a fait :** création de `e2e/employe.spec.ts` (35 tests, 30 passent / 5 skips conditionnels) couvrant les 7 domaines back-office employé : CRUD plats (allergènes), CRUD menus (min 1 plat), CRUD horaires, machine à états commandes (7 transitions + interdictions), annulation avec contact+motif, modération avis, filtres commandes. Neuf runs successifs pour arriver à 0 failure.
+
+**Pourquoi ces choix :**
+- Noms uniques suffixés `Date.now()` pour l'isolation entre sessions.
+- `PLAT_MENU_PLACEHOLDER` : la validation `dish_ids.min(1)` empêche de vider un menu — on garde un plat placeholder dans le menu pendant le nettoyage.
+- Navigation dynamique vers un menu actif (via `/menus`) plutôt qu'un ID hardcodé : si le menu 2 est inactif (`is_active = false`), `/commander/2` retourne 404 et les tests machine à états timeout.
+- `Promise.race` pour les assertions post-Server Action : la revalidation RSC peut retirer le composant `role="status"` (et son message de succès) avant que Playwright puisse le lire — on accepte soit le status soit le changement d'état visible.
+
+**Bugs réels détectés dans l'application :**
+- Race condition RSC : après `advanceOrderStatus("cancelled")` ou `moderateReview`, le composant success est éphémère (remplacé immédiatement par le RSC re-render).
+- `select defaultValue` React ne se reset pas après soft RSC navigation — le filtre de statut reste affiché même après "Réinitialiser".
+
+**Concepts clés :**
+- `locator("details").filter({ has: locator("summary").filter({ hasText: ... }) })` pour cibler les formulaires collapsibles.
+- `locator("li").filter({ has: getByRole("button", { name: "Refuser" }) })` pour ne cibler que les avis ayant des boutons de modération.
+- `isEnabled()` avant `.click()` sur un bouton `disabled` évite le timeout de 120s.
+- HTML5 `required` bloque la soumission côté navigateur — tester l'attribut + l'URL inchangée plutôt que le message serveur.
+
+**Fichiers créés :** `e2e/employe.spec.ts`.
+
+**À retenir :** pour les tests E2E sur une app RSC Next.js, ne jamais asserter sur un `role="status"` seul si la transition amène la commande dans un état final — le composant peut disparaître en quelques ms. Toujours `Promise.race` avec le changement d'état visible en alternative.

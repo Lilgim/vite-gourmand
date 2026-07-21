@@ -90,14 +90,14 @@ INSERT INTO menu_dishes (menu_id, dish_id) VALUES
 -- ce qui matérialise la relation N-N exigée par le sujet.
 
 INSERT INTO menu_images (menu_id, url, alt, position) VALUES
-  (1, '/images/menus/prestige-mariage-1.svg', 'Table de mariage dressée avec le menu Prestige', 0),
-  (1, '/images/menus/prestige-mariage-2.svg', 'Magret de canard sauce aux cèpes du menu Prestige', 1),
-  (2, '/images/menus/anniversaire-1.svg', 'Buffet d''anniversaire avec pavlova aux fruits rouges', 0),
-  (3, '/images/menus/cocktail-entreprise-1.svg', 'Plateau de pièces cocktail pour événement d''entreprise', 0),
-  (3, '/images/menus/cocktail-entreprise-2.svg', 'Verrines avocat-crevette en gros plan', 1),
-  (4, '/images/menus/vegetarien-1.svg', 'Risotto crémeux aux champignons des bois', 0),
-  (5, '/images/menus/vegan-1.svg', 'Curry de légumes au lait de coco et riz basmati', 0),
-  (6, '/images/menus/reveillon-1.svg', 'Table de réveillon avec foie gras et canelés', 0);
+  (1, '/images/menus/prestige-mariage-1.jpg', 'Table de mariage dressée avec le menu Prestige', 0),
+  (1, '/images/menus/prestige-mariage-2.jpg', 'Magret de canard sauce aux cèpes du menu Prestige', 1),
+  (2, '/images/menus/anniversaire-1.jpg', 'Buffet d''anniversaire avec pavlova aux fruits rouges', 0),
+  (3, '/images/menus/cocktail-entreprise-1.jpg', 'Plateau de pièces cocktail pour événement d''entreprise', 0),
+  (3, '/images/menus/cocktail-entreprise-2.jpg', 'Verrines avocat-crevette en gros plan', 1),
+  (4, '/images/menus/vegetarien-1.jpg', 'Risotto crémeux aux champignons des bois', 0),
+  (5, '/images/menus/vegan-1.jpg', 'Curry de légumes au lait de coco et riz basmati', 0),
+  (6, '/images/menus/reveillon-1.jpg', 'Table de réveillon festive, convives trinquant au vin', 0);
 
 -- ---------- Horaires (0 = lundi) ----------
 

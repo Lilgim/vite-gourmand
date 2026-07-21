@@ -236,7 +236,7 @@ export const MenuForm = ({
           Galerie d'images
         </label>
         <p id="images-hint" className="text-xs text-muted">
-          Une image par ligne au format « /chemin/image.svg | texte alternatif
+          Une image par ligne au format « /chemin/image.jpg | texte alternatif
           ».
         </p>
         <textarea
