@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { requireRole } from "@/lib/auth";
+
+// L'espace employé ne doit jamais être indexé par un moteur de recherche.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 // Garde serveur : tout l'espace employé exige le rôle employé (ou admin,
 // qui hérite des capacités employé).

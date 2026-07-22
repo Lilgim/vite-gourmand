@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
 import {
   formatPrice,
   getMenuById,
   getMenuDishes,
   getMenuImages,
 } from "@/lib/queries/menus";
+import { menuProductJsonLd } from "@/lib/structured-data";
 
 type MenuPageProps = { params: Promise<{ id: string }> };
 
@@ -39,6 +41,7 @@ export default async function MenuDetailPage({ params }: MenuPageProps) {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
+      <JsonLd data={menuProductJsonLd(menu, images[0]?.url)} />
       <nav
         aria-label="Fil d'Ariane"
         className="text-xs uppercase tracking-widest text-muted"
