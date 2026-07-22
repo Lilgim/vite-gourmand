@@ -1,0 +1,37 @@
+# Vite & Gourmand
+
+> Traiteur bordelais depuis 2015. Menus sur mesure pour mariages, anniversaires
+> et événements d'entreprise, commandables en ligne et livrés à Bordeaux et
+> dans sa métropole. Application web publique (Next.js) avec catalogue,
+> commande, suivi de commande et avis clients.
+
+## Fonctionnement
+
+- Consultation libre du catalogue et des fiches menus (thème, régime, plats,
+  allergènes, prix par personne, nombre minimum de convives).
+- La commande nécessite un compte client (inscription gratuite).
+- Prix calculé côté serveur : remise de 10 % au-delà du minimum de convives + 5,
+  et livraison hors Bordeaux facturée 5 € + 0,59 €/km.
+- Une commande passe par des statuts successifs (soumise, acceptée, en
+  préparation, en livraison, livrée, terminée) ; un avis 1–5 est possible une
+  fois la commande terminée.
+
+## Pages principales
+
+- [Accueil](/): présentation, menus vedettes, avis, horaires.
+- [Nos menus](/menus): catalogue complet avec filtres (thème, régime, prix).
+- [Fiche menu](/menus/{id}): détail d'un menu, plats, allergènes, prix.
+- [Contact](/contact): coordonnées et formulaire de demande.
+- [L'entreprise](/entreprise): présentation de la maison.
+- [Inscription](/inscription) et [Connexion](/connexion): accès au compte client.
+
+## Données structurées
+
+Chaque page expose des données Schema.org (JSON-LD) : `Caterer` sur l'accueil
+(adresse, horaires, note moyenne), `Product` + `Offer` sur chaque fiche menu
+(prix par personne, disponibilité). Voir aussi /sitemap.xml.
+
+## Notes
+
+- Les espaces `/admin`, `/employe` et `/compte` sont privés et non indexables.
+- Contact : contact@vite-gourmand.example — 18 rue des Faussets, 33000 Bordeaux.
