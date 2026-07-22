@@ -97,6 +97,10 @@ export const getMenuImages = (menuId: number): Promise<MenuImage[]> =>
     [menuId],
   );
 
+// Identifiants des menus actifs, pour le sitemap (requête légère).
+export const getPublicMenuIds = (): Promise<{ id: number }[]> =>
+  query<{ id: number }>("SELECT id FROM menus WHERE is_active ORDER BY id");
+
 export const getThemes = (): Promise<{ name: string }[]> =>
   query<{ name: string }>("SELECT name FROM themes ORDER BY name");
 
