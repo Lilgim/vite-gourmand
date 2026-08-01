@@ -44,3 +44,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 tmp-verify/
+
+# outillage local (non versionné)
+.claude/
+.codex/
+/AGENTS.md
+/CLAUDE.md
