@@ -15,6 +15,7 @@
  */
 
 import { expect, type Page, test } from "@playwright/test";
+import { futureDate } from "./dates";
 
 // ─── Constantes menus seedés ───────────────────────────────────────────────
 // Menu 2 : Anniversaire Gourmand — 38 €/pers, min 10
@@ -439,7 +440,7 @@ test.describe("Tunnel de commande — domaine client", () => {
     await countInput.fill("10");
     await page
       .getByLabel("Date de l'événement")
-      .fill("2026-10-15");
+      .fill(futureDate(30));
     await page.getByLabel("Heure").fill("12:00");
     await page
       .getByLabel("Adresse du lieu de réception")
@@ -487,7 +488,7 @@ test.describe("Tunnel de commande — domaine client", () => {
 
     // Saisie minimale valide
     await page.locator("#people_count").fill("10");
-    await page.getByLabel("Date de l'événement").fill("2026-10-20");
+    await page.getByLabel("Date de l'événement").fill(futureDate(35));
     await page.getByLabel("Heure").fill("14:00");
     await page.getByLabel("Adresse du lieu de réception").fill("5 cours Victor Hugo");
     await page.getByLabel("Code postal").fill("33000");
@@ -533,7 +534,7 @@ test.describe("Tunnel de commande — domaine client", () => {
     // Crée une commande
     await page.goto(`/commander/${MENU_2.id}`);
     await page.locator("#people_count").fill("10");
-    await page.getByLabel("Date de l'événement").fill("2026-11-01");
+    await page.getByLabel("Date de l'événement").fill(futureDate(45));
     await page.getByLabel("Heure").fill("12:00");
     await page.getByLabel("Adresse du lieu de réception").fill("3 place Gambetta");
     await page.getByLabel("Code postal").fill("33000");
@@ -574,7 +575,7 @@ test.describe("Tunnel de commande — domaine client", () => {
     // Crée une commande
     await page.goto(`/commander/${MENU_2.id}`);
     await page.locator("#people_count").fill("10");
-    await page.getByLabel("Date de l'événement").fill("2026-11-05");
+    await page.getByLabel("Date de l'événement").fill(futureDate(50));
     await page.getByLabel("Heure").fill("13:00");
     await page.getByLabel("Adresse du lieu de réception").fill("7 rue Fondaudège");
     await page.getByLabel("Code postal").fill("33000");
@@ -620,7 +621,7 @@ test.describe("Tunnel de commande — domaine client", () => {
     const clientEmail = await registerClient(page, `8-${Date.now()}`);
     await page.goto(`/commander/${MENU_2.id}`);
     await page.locator("#people_count").fill("10");
-    await page.getByLabel("Date de l'événement").fill("2026-12-01");
+    await page.getByLabel("Date de l'événement").fill(futureDate(75));
     await page.getByLabel("Heure").fill("15:00");
     await page.getByLabel("Adresse du lieu de réception").fill("2 quai Richelieu");
     await page.getByLabel("Code postal").fill("33000");

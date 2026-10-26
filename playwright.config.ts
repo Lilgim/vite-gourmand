@@ -26,6 +26,9 @@ export default defineConfig({
     : {
         command: "bun run start",
         url: baseURL,
+        // Quotas anti brute-force relevés (pas désactivés) pour la campagne :
+        // voir src/lib/rate-limit-core.ts.
+        env: { E2E_TEST_MODE: "1" },
         reuseExistingServer: true,
         timeout: 60_000,
       },

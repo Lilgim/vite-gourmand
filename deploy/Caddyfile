@@ -4,4 +4,8 @@
 
 {$DOMAIN} {
 	reverse_proxy app:3000
+
+	# HSTS : force HTTPS côté navigateur pendant un an (Caddy ne l'ajoute
+	# pas par défaut). Complète les en-têtes applicatifs de next.config.ts.
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
 }

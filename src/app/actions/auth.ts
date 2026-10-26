@@ -13,6 +13,7 @@ import {
   createPasswordResetToken,
   verifyPasswordResetToken,
 } from "@/lib/password-reset";
+import { rateLimit } from "@/lib/rate-limit";
 import {
   emailSchema,
   type FormState,
@@ -21,10 +22,18 @@ import {
   resetPasswordSchema,
 } from "@/lib/validation";
 
+// Message unique en cas de dépassement de quota (anti brute-force / spam).
+const tooManyRequests: FormState = {
+  status: "error",
+  message: "Trop de tentatives. Merci de réessayer dans quelques minutes.",
+};
+
 export const register = async (
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> => {
+  if (!(await rateLimit("register", 5, 60 * 60 * 1000))) return tooManyRequests;
+
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -97,6 +106,9 @@ export const requestPasswordReset = async (
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> => {
+  if (!(await rateLimit("password-reset", 5, 15 * 60 * 1000)))
+    return tooManyRequests;
+
   const parsed = emailSchema.safeParse({ email: formData.get("email") });
   if (!parsed.success)
     return { status: "error", errors: z_flatten(parsed.error) };
@@ -164,6 +176,8 @@ export const login = async (
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> => {
+  if (!(await rateLimit("login", 10, 15 * 60 * 1000))) return tooManyRequests;
+
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

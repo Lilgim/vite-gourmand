@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { futureDate } from "./dates";
 
 // ============================================================
 // QA : Domaine "Back-office EMPLOYÉ" — Vite & Gourmand
@@ -131,7 +132,7 @@ const createClientAndOrder = async (page: Page): Promise<number> => {
   await page.waitForLoadState("networkidle");
 
   await page.locator("input#people_count").fill(String(minPeople));
-  await page.getByLabel("Date de l'événement").fill("2027-03-15");
+  await page.getByLabel("Date de l'événement").fill(futureDate(140));
   await page.getByLabel("Heure").fill("12:00");
   await page
     .getByLabel("Adresse du lieu de réception")
@@ -605,7 +606,7 @@ test.describe.serial("Machine à états des commandes", () => {
     await page.getByRole("link", { name: /Commander ce menu/i }).click();
     await page.waitForLoadState("networkidle");
     await page.locator("input#people_count").fill(String(cancelMinPeople));
-    await page.getByLabel("Date de l'événement").fill("2027-04-20");
+    await page.getByLabel("Date de l'événement").fill(futureDate(175));
     await page.getByLabel("Heure").fill("14:00");
     await page
       .getByLabel("Adresse du lieu de réception")

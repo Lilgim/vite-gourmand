@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { requireRole } from "@/lib/auth";
+
+// L'administration ne doit jamais être indexée par un moteur de recherche.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 // Garde serveur : l'administration exige strictement le rôle admin.
 export default async function AdminLayout({

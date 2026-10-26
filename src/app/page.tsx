@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/json-ld";
 import { DAY_NAMES, formatTime } from "@/lib/labels";
 import { getApprovedReviews, getOpeningHours } from "@/lib/queries/home";
 import { formatPrice, getActiveMenus } from "@/lib/queries/menus";
+import { cateringBusinessJsonLd } from "@/lib/structured-data";
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 
@@ -17,6 +19,7 @@ export default async function HomePage() {
 
   return (
     <div className="overflow-hidden">
+      <JsonLd data={cateringBusinessJsonLd(hours, reviews)} />
       <section className="landing-grain relative border-b border-line">
         <div className="mx-auto grid min-h-[720px] max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:py-20">
           <div className="landing-reveal relative z-10 max-w-2xl">
