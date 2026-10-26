@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { futureDate } from "./dates";
 
 // Parcours complet des 4 rôles du sujet, exécuté en série sur une base
 // réinitialisée (bun run test:e2e lance scripts/reset-db.ts avant).
@@ -95,7 +96,7 @@ test.describe.serial("parcours ECF complet", () => {
     // Commande du menu 2 : 16 convives → remise (16 ≥ 10 + 5)
     await page.goto("/commander/2");
     await page.getByLabel("Nombre de convives").fill("16");
-    await page.getByLabel("Date de l'événement").fill("2026-09-20");
+    await page.getByLabel("Date de l'événement").fill(futureDate(30));
     await page.getByLabel("Heure").fill("19:30");
     await page
       .getByLabel("Adresse du lieu de réception")
